@@ -1,0 +1,3275 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=46e4fef3-202a-4370-a75a-c8d423dab2fc
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+  <title>
+   Best Panel
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js">
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js">
+  </script>
+  <style>
+   :root{--bg-color:#0d0d0d;--card-bg:#161616;--border-color:#262626;--text-main:#f5f5f5;--text-secondary:#737373;--input-bg:#121212;--btn-bg:#f5f5f5;--btn-text:#0a0a0a;--btn-hover:#e5e5e5;--dropdown-bg:#1a1a1a;--dropdown-hover:#262626;--grid-line:rgba(255,255,255,.015);--sidebar-width:240px;--sidebar-collapsed:70px;--name-card-bg:#1f1f1f;--name-card-border:#2e2e2e}
+[data-theme="light"]{--bg-color:#e5e7eb;--card-bg:#fff;--border-color:#d1d5db;--text-main:#111827;--text-secondary:#4b5563;--input-bg:#f9fafb;--btn-bg:#1f2937;--btn-text:#f9fafb;--btn-hover:#374151;--dropdown-bg:#fff;--dropdown-hover:#f3f4f6;--grid-line:rgba(0,0,0,.04);--name-card-bg:#f3f4f6;--name-card-border:#e4e4e7}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;transition:background-color .2s,color .2s,border-color .2s}
+body{background-color:var(--bg-color);color:var(--text-main);display:flex;min-height:100vh;position:relative;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:30px 30px;overflow-x:hidden}
+body.unauthenticated #mobileHamburger{display:none!important}
+.top-right-bar{position:fixed;top:20px;right:20px;display:flex;gap:10px;z-index:1000}
+.icon-btn{background-color:var(--card-bg);border:1px solid var(--border-color);color:var(--text-main);width:36px;height:36px;border-radius:8px;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);position:relative;font-size:13px;font-weight:600}
+.icon-btn:hover{border-color:var(--text-secondary)}
+.dropdown-menu{position:absolute;top:44px;right:0;background-color:var(--dropdown-bg);border:1px solid var(--border-color);border-radius:8px;width:130px;box-shadow:0 10px 25px rgba(0,0,0,.3);display:none;flex-direction:column;padding:4px;z-index:1100}
+.dropdown-menu.show{display:flex}
+.dropdown-item{background:0 0;border:none;color:var(--text-secondary);font-size:12px;padding:8px 10px;text-align:left;border-radius:4px;cursor:pointer}
+.dropdown-item:hover,.dropdown-item.active{background-color:var(--dropdown-hover);color:var(--text-main)}
+.view-section{display:none;width:100%;min-height:100vh}
+.view-section.active{display:flex}
+/* ===== Register button ===== */
+.register-link-btn{width:100%;padding:12px;background:transparent;border:1px dashed var(--border-color);color:var(--text-secondary);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.register-link-btn:hover{border-color:var(--text-main);color:var(--text-main);background-color:var(--dropdown-hover)}
+.register-info-box{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:12px;margin-bottom:14px;font-size:11.5px;line-height:1.6;color:var(--text-secondary)}
+.register-info-box b{color:#3b82f6}
+/* ===== Privacy consent (smaller) ===== */
+.privacy-consent-box{margin:14px 0 10px;padding:10px;border:1px solid var(--border-color);border-radius:10px;background:var(--input-bg)}
+.privacy-consent-title{font-size:11px;font-weight:700;color:var(--text-main);margin-bottom:5px}
+.privacy-check-row{display:flex;align-items:center;gap:7px;font-size:10px;line-height:1.4;color:var(--text-main)}
+.ios-checkbox{position:relative;width:18px;height:18px;flex:0 0 18px}
+.ios-checkbox input{position:absolute;opacity:0;width:0;height:0}
+.ios-checkbox span{position:absolute;inset:0;border:1px solid var(--border-color);border-radius:6px;background:var(--card-bg);box-shadow:inset 0 1px 2px rgba(0,0,0,.18);transition:.18s ease;cursor:pointer}
+.ios-checkbox span:after{content:'✓';position:absolute;left:3px;top:-2px;color:#fff;font-size:14px;font-weight:700;opacity:0;transform:scale(.7);transition:.18s ease}
+.ios-checkbox input:checked+span{background:#fff;border-color:#fff}
+.ios-checkbox input:checked+span:after{color:#111827;opacity:1;transform:scale(1)}
+.privacy-info-btn{width:18px;height:18px;border:1px solid var(--border-color);border-radius:50%;background:transparent;color:var(--text-secondary);font-size:11px;font-weight:700;line-height:16px;cursor:pointer;padding:0;flex-shrink:0}
+.privacy-info-btn:hover{color:var(--text-main);border-color:var(--text-secondary)}
+.privacy-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.58);z-index:3000;backdrop-filter:blur(7px)}
+.privacy-modal.active{display:flex}
+.privacy-modal-card{width:min(420px,100%);max-height:70vh;overflow:auto;padding:18px;border:1px solid var(--border-color);border-radius:14px;background:var(--card-bg);box-shadow:0 20px 60px rgba(0,0,0,.38);color:var(--text-secondary);font-size:11px;line-height:1.55}
+.privacy-modal-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px}
+.privacy-modal-head h2{margin:0;color:var(--text-main);font-size:15px}
+.privacy-modal-close{width:26px;height:26px;border:0;border-radius:50%;background:var(--input-bg);color:var(--text-secondary);font-size:16px;cursor:pointer}
+.privacy-modal-card p{margin:8px 0}
+.privacy-body{display:none}
+.privacy-body.active{display:block}
+.auth-wrapper{flex:1;display:flex;justify-content:center;align-items:center;width:100%;padding:20px}
+.container{width:100%;max-width:400px}
+.card{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.cloud-icon-box{display:flex;justify-content:center;align-items:center;width:44px;height:44px;background-color:#1d1d1d;border:1px solid #2a2a2a;border-radius:10px;margin:0 auto 22px auto}
+[data-theme="light"] .cloud-icon-box{background:#f3f4f6;border-color:#d1d5db}
+.auth-title{text-align:center;font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:6px}
+.auth-subtitle{text-align:center;font-size:12px;color:var(--text-secondary);margin-bottom:20px}
+.form-group{margin-bottom:14px}
+label.form-label{display:block;font-size:11px;font-weight:500;color:var(--text-secondary);margin-bottom:6px;letter-spacing:.5px}
+input[type=text],input[type=password],input[type=number],textarea{width:100%;padding:11px 14px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:13px;outline:0}
+textarea{resize:vertical;min-height:120px;font-family:monospace}
+input:focus,textarea:focus{border-color:var(--text-secondary);box-shadow:0 0 0 3px rgba(148,163,184,.15)}
+button.submit-btn{width:100%;padding:11px;background-color:var(--btn-bg);color:var(--btn-text);border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px}
+button.submit-btn:hover{background-color:var(--btn-hover)}
+button.submit-btn.btn-success{background-color:#22c55e!important;color:#fff!important}
+.admin-support-btn{width:100%;padding:11px;background-color:transparent;color:var(--text-secondary);border:1px solid var(--border-color);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.admin-support-btn:hover{border-color:var(--text-main);color:var(--text-main);background-color:var(--dropdown-hover)}
+.dashboard-layout{display:flex;width:100%;min-height:100vh}
+aside{width:var(--sidebar-width);background-color:var(--card-bg);border-right:1px solid var(--border-color);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:200;transition:width .3s ease}
+aside.collapsed{width:var(--sidebar-collapsed)}
+.sidebar-header{padding:20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);height:70px}
+.sidebar-logo{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+aside.collapsed .sidebar-logo{display:none}
+.toggle-sidebar-btn{background:0 0;border:none;color:var(--text-secondary);cursor:pointer;padding:6px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.sidebar-nav{padding:15px;display:flex;flex-direction:column;gap:8px;flex:1;overflow-y:auto}
+.sidebar-footer{padding:15px;border-top:1px solid var(--border-color);display:flex;justify-content:center;margin-top:auto}
+.logout-btn{background-color:transparent;border:1px solid transparent;color:#ef4444;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.logout-btn:hover{background-color:rgba(239,68,68,.1)}
+aside.collapsed .logout-text{display:none}
+aside.collapsed .logout-btn{width:40px;height:40px;padding:0}
+main{flex:1;margin-left:var(--sidebar-width);display:flex;flex-direction:column;min-height:100vh;transition:margin-left .3s ease;min-width:0}
+aside.collapsed~main{margin-left:var(--sidebar-collapsed)}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--text-secondary);font-size:13px;font-weight:600;cursor:pointer;text-align:left}
+.nav-item:hover{background-color:var(--dropdown-hover);color:var(--text-main)}
+.nav-item.active{background-color:var(--dropdown-hover);color:var(--text-main);border-left:2px solid var(--btn-bg);border-radius:0 8px 8px 0;margin-left:-12px;padding-left:14px}
+aside.collapsed .nav-item span{display:none}
+aside.collapsed .nav-item{justify-content:center;padding:10px}
+.dashboard-page{display:none}
+.dashboard-page.active{display:block}
+.dashboard-content{padding:70px 30px 30px 30px;flex:1;max-width:1300px;width:100%;margin:0 auto;min-width:0}
+.dashboard-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.dashboard-title h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.dashboard-title p{font-size:13px;color:var(--text-secondary)}
+.btn-primary{background-color:var(--btn-bg);color:var(--btn-text);border:none;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-primary:hover{background-color:var(--btn-hover)}
+.btn-danger{background-color:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.35);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-danger:hover{background-color:rgba(239,68,68,.2)}
+.btn-outline{background:transparent;border:1px solid var(--border-color);color:var(--text-main);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-outline:hover{border-color:var(--text-secondary);background-color:var(--dropdown-hover)}
+.btn-success{background-color:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.35);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.ios-select-wrapper{position:relative;width:160px}
+.ios-select-btn{width:100%;padding:8px 12px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:8px;color:var(--text-main);font-size:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.ios-dropdown{position:absolute;top:calc(100% + 6px);left:0;width:100%;background-color:var(--dropdown-bg);border:1px solid var(--border-color);border-radius:12px;box-shadow:0 15px 35px rgba(0,0,0,.4);display:none;grid-template-columns:1fr 1fr;gap:4px;max-height:220px;overflow-y:auto;z-index:2500;padding:6px}
+.ios-dropdown.show{display:grid}
+.ios-option{padding:8px 10px;font-size:12px;color:var(--text-main);border-radius:6px;cursor:pointer;text-align:left}
+.ios-option:hover{background-color:var(--dropdown-hover)}
+.ios-option.full-width{grid-column:1/-1;text-align:center;border-top:1px solid var(--border-color);margin-top:2px;padding-top:8px}
+.toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:4000;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90vw}
+.toast-item{display:flex;align-items:center;gap:8px;background-color:rgba(22,22,22,.9);backdrop-filter:blur(20px);border:1px solid var(--border-color);color:var(--text-main);font-size:12px;font-weight:600;padding:10px 16px;border-radius:10px;box-shadow:0 15px 35px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+[data-theme="light"] .toast-item{background-color:rgba(255,255,255,.95)}
+.toast-item.show{opacity:1;transform:translateY(0)}
+.toast-item.toast-error{background-color:rgba(239,68,68,.9);color:#fff}
+.toast-item svg{color:#10b981}
+.toast-item.toast-error svg{color:#fff}
+.search-box{flex:1;background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:0 14px;display:flex;align-items:center;gap:10px;min-width:0}
+.search-box input{width:100%;background:transparent;border:none;padding:12px 0;color:var(--text-main);font-size:13px;outline:0;min-width:0}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid-full{grid-column:span 2}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:2000;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-card{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;padding:24px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:700}
+.modal-close-btn{background:transparent;border:none;color:var(--text-secondary);cursor:pointer;padding:4px;border-radius:4px}
+.view-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.view-detail-item{background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:8px;padding:10px 14px}
+.view-detail-item.full-width{grid-column:span 2}
+.view-detail-label{font-size:10px;color:var(--text-secondary);margin-bottom:4px;font-weight:600}
+.view-detail-value{font-size:13px;color:var(--text-main);font-weight:500;word-break:break-all}
+.qr-container{display:flex;flex-direction:column;align-items:center;gap:10px;margin:10px 0 20px 0}
+.qr-box{display:inline-flex;align-items:center;justify-content:center;background-color:#fff;border-radius:10px;padding:14px;margin:10px auto}
+.settings-section{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:16px}
+.settings-section-title{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.settings-grid-full{grid-column:span 2}
+.table-container{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13px}
+th{background-color:rgba(0,0,0,.02);color:var(--text-secondary);font-weight:600;font-size:11px;padding:14px 16px;border-bottom:1px solid var(--border-color)}
+td{padding:12px 16px;border-bottom:1px solid var(--border-color);color:var(--text-main);vertical-align:middle}
+tr.data-row:hover{background-color:rgba(255,255,255,.02)}
+.toggle-switch{position:relative;display:inline-block;width:38px;height:22px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--input-bg);border:1px solid var(--border-color);transition:.3s;border-radius:22px}
+.slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:var(--text-secondary);transition:.3s;border-radius:50%}
+input:checked+.slider{background-color:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4)}
+input:checked+.slider:before{transform:translateX(16px);background-color:#22c55e}
+.name-card-wrapper{display:inline-flex;flex-direction:column;gap:4px}
+.name-badge-box{background-color:var(--name-card-bg);border:1px solid var(--name-card-border);padding:6px 12px;border-radius:8px;font-weight:600;font-size:13px;color:var(--text-main);display:inline-block}
+.status-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500}
+.dot-yellow{width:8px;height:8px;background-color:#f59e0b;border-radius:50%}
+.dot-green{width:8px;height:8px;background-color:#10b981;border-radius:50%}
+.configs-info{display:flex;flex-direction:column;gap:6px}
+.configs-total{font-weight:600;font-size:12px;color:var(--text-main)}
+.configs-badges{display:flex;gap:4px;flex-wrap:wrap;max-width:140px}
+.badge-vless{background-color:rgba(59,130,246,.08);color:rgba(59,130,246,.7);font-size:9px;font-weight:600;padding:2px 5px;border-radius:4px}
+.badge-vmess{background-color:rgba(168,85,247,.08);color:rgba(168,85,247,.7);font-size:9px;font-weight:600;padding:2px 5px;border-radius:4px}
+.badge-trojan{background-color:rgba(239,68,68,.08);color:rgba(239,68,68,.7);font-size:9px;font-weight:600;padding:2px 5px;border-radius:4px}
+.actions-cell{display:flex;gap:4px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.action-icon-btn{background-color:transparent;border:1px solid var(--border-color);color:var(--text-secondary);width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0}
+.action-icon-btn:hover{color:var(--text-main);border-color:var(--text-secondary);background:var(--dropdown-hover)}
+.action-icon-btn:disabled{opacity:.3;cursor:not-allowed}
+.stats-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.stat-card{flex:1;min-width:150px;background:var(--card-bg);border:1px solid var(--border-color);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.stat-card-top{display:flex;align-items:center;gap:8px}
+.stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-blue{background-color:#3b82f6}.dot-green{background-color:#22c55e}.dot-yellow{background-color:#f59e0b}.dot-purple{background-color:#a855f7}
+.stat-label{font-size:11px;color:var(--text-secondary);font-weight:500}
+.stat-value{font-size:22px;font-weight:700;color:var(--text-main);line-height:1}
+.confirm-modal{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:3000;padding:20px}
+.confirm-modal.active{display:flex}
+.confirm-modal-card{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:24px;width:100%;max-width:400px}
+.confirm-modal-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.confirm-modal-text{font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.5}
+.confirm-modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.btn-confirm-cancel{padding:8px 18px;border:1px solid var(--border-color);background:transparent;color:var(--text-main);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-confirm-delete{padding:8px 18px;border:1px solid rgba(239,68,68,.4);background-color:rgba(239,68,68,.1);color:#ef4444;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.subs-empty{text-align:center;padding:70px 20px;color:var(--text-secondary)}
+.mobile-hamburger{display:none;position:fixed;top:16px;left:14px;z-index:300;background:var(--card-bg);border:1px solid var(--border-color);color:var(--text-main);width:38px;height:38px;border-radius:12px;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:190}
+.sidebar-overlay.active{display:block}
+.pagination-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border-color);font-size:12px;color:var(--text-secondary);flex-wrap:wrap;gap:8px}
+.pagination-btns{display:flex;gap:4px;flex-wrap:wrap}
+.pagination-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--border-color);background:transparent;color:var(--text-main);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pagination-btn.active{background-color:var(--btn-bg);color:var(--btn-text);border-color:var(--btn-bg)}
+/* ===== Expired overlay ===== */
+.expired-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(220,38,38,.97),rgba(153,27,27,.97));z-index:6000;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(10px);animation:fadeIn .35s ease}
+.expired-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.expired-content{max-width:420px;width:100%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:32px 24px;text-align:center;color:#fff;box-shadow:0 25px 60px rgba(0,0,0,.5)}
+.expired-icon{width:80px;height:80px;margin:0 auto 18px auto;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border-radius:50%;animation:pulseWarn 1.6s ease-in-out infinite}
+@keyframes pulseWarn{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.4)}50%{transform:scale(1.05);box-shadow:0 0 0 18px rgba(255,255,255,0)}}
+.expired-title{font-size:24px;font-weight:800;margin-bottom:10px;letter-spacing:.3px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.expired-text{font-size:13px;line-height:1.65;color:rgba(255,255,255,.92);margin-bottom:22px}
+.expired-support-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;background:#fff;color:#dc2626;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:transform .15s ease,box-shadow .15s ease}
+.expired-support-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.45)}
+.expired-logout-btn{width:100%;padding:11px;background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.3);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;margin-top:10px}
+.expired-logout-btn:hover{background:rgba(0,0,0,.15);color:#fff}
+.expired-info-badge{display:inline-block;background:rgba(0,0,0,.3);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:18px;color:rgba(255,255,255,.95)}
+/* Code management */
+.code-manage-row{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--input-bg);border:1px solid var(--border-color);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.code-manage-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border-color);padding-bottom:8px}
+.code-manage-title{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;flex:1}
+.code-manage-actions{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.code-manage-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.code-manage-field label{font-size:11px;font-weight:600;color:var(--text-secondary);width:70px;flex-shrink:0}
+.code-manage-field input{flex:1;margin:0;padding:8px 12px;font-size:12px;min-width:0;background:var(--card-bg);border:1px solid var(--border-color);border-radius:6px;color:var(--text-main);outline:0;font-family:inherit}
+.code-manage-field input.code-input{font-family:monospace;font-size:11px;color:var(--text-secondary);width:100%;word-break:break-all}
+.code-proto-badge{font-size:9px;font-weight:700;padding:3px 7px;border-radius:5px;letter-spacing:.3px;flex-shrink:0}
+.proto-vless{background:rgba(59,130,246,.15);color:#3b82f6}
+.proto-vmess{background:rgba(168,85,247,.15);color:#a855f7}
+.proto-trojan{background:rgba(239,68,68,.15);color:#ef4444}
+.proto-ss{background:rgba(34,197,94,.15);color:#22c55e}
+.proto-hysteria{background:rgba(234,179,8,.15);color:#eab308}
+.proto-other{background:var(--dropdown-hover);color:var(--text-secondary)}
+.code-stats-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.code-stats-bar .stat-mini{background:var(--input-bg);border:1px solid var(--border-color);border-radius:8px;padding:6px 12px;font-size:11px;color:var(--text-secondary);display:inline-flex;gap:6px;align-items:center}
+.code-stats-bar .stat-mini b{color:var(--text-main);font-weight:700}
+.usage-stats-box{background:var(--input-bg);border:1px solid var(--border-color);border-radius:10px;padding:14px}
+.usage-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:12px;border-bottom:1px dashed var(--border-color);gap:10px;flex-wrap:wrap}
+.usage-row:last-child{border-bottom:none}
+.usage-label{color:var(--text-secondary);font-weight:500}
+.usage-value{color:var(--text-main);font-weight:600;font-family:ui-monospace,monospace}
+.usage-progress-wrap{margin-top:10px}
+.usage-progress-track{width:100%;height:8px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;margin-top:6px}
+.usage-progress-fill{height:100%;border-radius:10px;transition:width .4s ease,background-color .4s ease}
+.usage-progress-fill.low{background-color:#10b981}
+.usage-progress-fill.mid{background-color:#f59e0b}
+.usage-progress-fill.high{background-color:#ef4444}
+.hwids-list-box{background:var(--input-bg);border:1px solid var(--border-color);border-radius:10px;padding:12px;max-height:220px;overflow-y:auto}
+.hwid-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border-color);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:6px;font-size:12px}
+.hwid-item .hwid-index{width:22px;height:22px;border-radius:6px;background:rgba(59,130,246,.15);color:#3b82f6;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.hwid-item .hwid-id{color:var(--text-main);font-family:ui-monospace,monospace;font-size:11px;word-break:break-all;flex:1;min-width:0}
+.hwid-item .hwid-remove{background:transparent;border:1px solid rgba(239,68,68,.3);color:#ef4444;width:24px;height:24px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;padding:0;flex-shrink:0}
+.hwid-empty{color:var(--text-secondary);font-size:12px;text-align:center;padding:14px}
+.hwid-counter{display:flex;justify-content:space-between;align-items:center;padding:8px 0 4px 0;font-size:12px}
+.hwid-counter .hwid-counter-label{color:var(--text-secondary)}
+.hwid-counter .hwid-counter-value{color:var(--text-main);font-weight:700}
+.hwid-counter .hwid-counter-value.full{color:#ef4444}
+.timeline-list{display:flex;flex-direction:column}
+.timeline-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-color);align-items:flex-start;flex-wrap:wrap}
+.timeline-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.timeline-icon.icon-create{background:rgba(34,197,94,.1);color:#22c55e}
+.timeline-icon.icon-edit{background:rgba(234,179,8,.1);color:#eab308}
+.timeline-icon.icon-delete{background:rgba(239,68,68,.1);color:#ef4444}
+.timeline-icon.icon-toggle{background:rgba(99,102,241,.1);color:#6366f1}
+.timeline-body{flex:1;min-width:0}
+.timeline-title{font-size:13px;font-weight:600;color:var(--text-main);margin-bottom:2px;word-break:break-word}
+.timeline-desc{font-size:12px;color:var(--text-secondary);word-break:break-word}
+.timeline-time{font-size:11px;color:var(--text-secondary);white-space:nowrap;flex-shrink:0}
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.group-card{background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;cursor:pointer}
+.group-card:hover{border-color:var(--text-secondary)}
+.group-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.group-card-icon{width:38px;height:38px;flex-shrink:0;border-radius:10px;background-color:var(--input-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center}
+.group-card-name{font-size:14px;font-weight:700;word-break:break-word}
+.group-card-meta{font-size:11px;color:var(--text-secondary)}
+.group-card-actions{display:flex;gap:6px;margin-top:auto;padding-top:10px;border-top:1px solid var(--border-color)}
+.groups-empty{text-align:center;padding:70px 20px;color:var(--text-secondary)}
+@media (max-width:900px){.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.settings-grid{grid-template-columns:1fr}.settings-grid-full{grid-column:span 1}.form-grid-2{grid-template-columns:1fr!important}.form-grid-full{grid-column:span 1!important}}
+@media (max-width:768px){
+.mobile-hamburger{display:flex;top:calc(16px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px))}
+aside{left:-280px;width:260px!important;transition:left .3s ease;z-index:280;border-radius:0 20px 20px 0;overflow:hidden}
+aside.mobile-open{left:0;box-shadow:8px 0 40px rgba(0,0,0,.35)}
+.sidebar-overlay.active{z-index:270;backdrop-filter:blur(4px)}
+main{margin-left:0!important}
+.toggle-sidebar-btn{display:none}
+.dashboard-content{padding:62px 14px 20px 14px;max-width:100%}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-card{padding:14px!important;min-width:0!important}
+.stat-value{font-size:20px!important}
+.dashboard-header{flex-direction:column;gap:14px;margin-bottom:18px}
+.dashboard-title h1{font-size:20px}
+.btn-primary,.btn-danger,.btn-success{width:100%;justify-content:center;padding:12px 16px}
+.table-container{overflow:visible;background:transparent;border:none}
+table{display:block;min-width:0}
+thead{display:none}
+tbody{display:flex;flex-direction:column;gap:10px}
+tr.data-row{display:flex;flex-direction:column;background-color:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:14px;gap:12px}
+tr.data-row td{border-bottom:none;padding:0}
+.modal-overlay{align-items:flex-end;padding:0}
+.modal-card{max-width:100%;max-height:88vh;border-radius:16px 16px 0 0;padding:20px 16px}
+.view-details-grid{grid-template-columns:1fr!important}
+.view-detail-item.full-width{grid-column:span 1!important}
+.confirm-modal{align-items:flex-end;padding:0}
+.confirm-modal-card{width:100%;border-radius:16px 16px 0 0;padding:24px 16px 28px}
+.settings-grid{grid-template-columns:1fr!important}
+.settings-grid-full{grid-column:span 1!important}
+.groups-grid{grid-template-columns:1fr;gap:10px}
+.code-manage-field label{width:60px;font-size:10.5px}
+.code-manage-title{font-size:12px}
+.action-icon-btn{width:32px;height:32px}
+.code-manage-field input{font-size:11.5px;padding:8px 10px}
+.expired-content{padding:26px 18px;border-radius:16px}
+.expired-title{font-size:20px}
+.expired-icon{width:68px;height:68px}
+}
+@media (max-width:400px){
+.dashboard-content{padding:58px 10px 18px 10px}
+.stat-card{padding:12px!important}
+.stat-value{font-size:18px!important}
+}
+
+/* ===== Best Panel visual refresh (UI only) ===== */
+:root{--accent:#7c3aed;--accent-2:#a78bfa;--glow:rgba(124,58,237,.24)}
+body{background-image:radial-gradient(circle at 50% -10%,rgba(124,58,237,.16),transparent 35%),linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:auto,30px 30px,30px 30px}
+.auth-wrapper{position:relative;overflow:hidden}
+.auth-wrapper:before,.auth-wrapper:after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.auth-wrapper:before{width:240px;height:240px;background:rgba(124,58,237,.12);top:8%;left:20%}
+.auth-wrapper:after{width:200px;height:200px;background:rgba(59,130,246,.08);bottom:5%;right:18%}
+.auth-wrapper .container{position:relative;z-index:1}
+.card{background:linear-gradient(145deg,rgba(22,22,22,.94),rgba(13,13,13,.9));border-color:rgba(255,255,255,.09);border-radius:20px;padding:30px;box-shadow:0 25px 80px rgba(0,0,0,.48),0 0 0 1px rgba(124,58,237,.04);backdrop-filter:blur(18px)}
+.cloud-icon-box{width:58px;height:58px;border-radius:16px;margin-bottom:18px;background:linear-gradient(145deg,#7c3aed,#4f46e5)!important;border:0!important;box-shadow:0 12px 35px var(--glow);color:#fff}
+.cloud-icon-box svg{filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.auth-title{font-size:24px;letter-spacing:-.5px}
+.auth-subtitle{font-size:12px;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+label.form-label{font-size:10px;text-transform:uppercase;letter-spacing:1px}
+input[type=text],input[type=password],input[type=number],textarea{padding:13px 14px;border-radius:11px;background:rgba(0,0,0,.22);border-color:rgba(255,255,255,.08)}
+input:focus,textarea:focus{border-color:rgba(167,139,250,.7);box-shadow:0 0 0 4px rgba(124,58,237,.11),0 0 22px rgba(124,58,237,.08)}
+button.submit-btn{padding:13px;border-radius:11px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;box-shadow:0 10px 25px rgba(124,58,237,.2);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+button.submit-btn:hover{background:linear-gradient(135deg,#8b5cf6,#6d28d9);transform:translateY(-1px);box-shadow:0 14px 30px rgba(124,58,237,.28)}
+.register-link-btn,.admin-support-btn{border-radius:11px}
+.register-link-btn:hover,.admin-support-btn:hover{border-color:rgba(167,139,250,.45);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.sidebar-header{background:linear-gradient(180deg,rgba(124,58,237,.07),transparent)}
+.sidebar-logo{font-size:15px;font-weight:800;letter-spacing:.2px}
+.sidebar-logo:before{content:"✦";display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;margin-right:8px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-size:12px;box-shadow:0 6px 18px rgba(124,58,237,.25);vertical-align:-2px}
+.nav-item{transition:transform .16s ease,background-color .16s ease,color .16s ease,border-color .16s ease}
+.nav-item:hover{transform:translateX(2px)}
+.nav-item.active{border-left-color:#8b5cf6;box-shadow:inset 8px 0 24px rgba(124,58,237,.04)}
+.dashboard-title h1{letter-spacing:-.4px}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;box-shadow:0 8px 20px rgba(124,58,237,.16)}
+.btn-primary:hover{background:linear-gradient(135deg,#8b5cf6,#6d28d9);transform:translateY(-1px)}
+  </style>
+ </head>
+ <body class="unauthenticated">
+  <button class="mobile-hamburger" id="mobileHamburger">
+   <svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+    <line x1="4" x2="20" y1="6" y2="6">
+    </line>
+    <line x1="4" x2="16" y1="12" y2="12">
+    </line>
+    <line x1="4" x2="20" y1="18" y2="18">
+    </line>
+   </svg>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay">
+  </div>
+  <div class="top-right-bar">
+   <div style="position:relative;">
+    <button class="icon-btn" id="themeMenuBtn">
+     <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+      <rect height="14" rx="2" width="20" x="2" y="3">
+      </rect>
+      <line x1="8" x2="16" y1="21" y2="21">
+      </line>
+      <line x1="12" x2="12" y1="17" y2="21">
+      </line>
+     </svg>
+    </button>
+    <div class="dropdown-menu" id="themeDropdown">
+     <button class="dropdown-item" data-theme="dark">
+      Dark
+     </button>
+     <button class="dropdown-item" data-theme="light">
+      Light
+     </button>
+     <button class="dropdown-item active" data-theme="system">
+      System
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- AUTH VIEW -->
+  <div class="view-section active" id="authView">
+   <div class="auth-wrapper">
+    <div class="container">
+     <div class="card">
+      <div class="cloud-icon-box">
+       <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z">
+        </path>
+        <polyline points="9 12 11 14 15 10">
+        </polyline>
+       </svg>
+      </div>
+      <h1 class="auth-title">
+       Best Panel
+      </h1>
+      <p class="auth-subtitle">
+       Panel adyňyz we parolyňyz bilen giriş
+      </p>
+      <form autocomplete="off" id="loginForm">
+       <div class="form-group">
+        <label class="form-label">
+         Ulanyjy ady
+        </label>
+        <input autocomplete="off" id="loginUser" placeholder="Ulanyjy ady" required="" type="text"/>
+       </div>
+       <div class="form-group">
+        <label class="form-label">
+         Parol
+        </label>
+        <input id="loginPass" placeholder="Parol" required="" type="password"/>
+       </div>
+       <button class="submit-btn" type="submit">
+        Girmek
+       </button>
+      </form>
+      <button class="register-link-btn" id="btnOpenRegister" type="button">
+       <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2">
+        </path>
+        <circle cx="8.5" cy="7" r="4">
+        </circle>
+        <line x1="20" x2="20" y1="8" y2="14">
+        </line>
+        <line x1="23" x2="17" y1="11" y2="11">
+        </line>
+       </svg>
+       Hasabyňyz ýokmy? Täze hasap aç
+      </button>
+      <a class="admin-support-btn" href="https://t.me/besttvpns" id="adminSupportBtn" target="_blank">
+       <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+        </path>
+       </svg>
+       <span>
+        Admin Goldaw
+       </span>
+      </a>
+      <div class="privacy-consent-box">
+       <div class="privacy-consent-title">
+        Gizlinlik syýasaty
+       </div>
+       <div class="privacy-check-row">
+        <label class="ios-checkbox">
+         <input id="privacyConsent" type="checkbox"/>
+         <span>
+         </span>
+        </label>
+        <span>
+         Kabul edýärin
+        </span>
+        <button class="privacy-info-btn" id="privacyPolicyInfo" type="button">
+         i
+        </button>
+       </div>
+      </div>
+     </div>
+     <div class="privacy-modal" id="privacyModal">
+      <div class="privacy-modal-card">
+       <div class="privacy-modal-head">
+        <h2>
+         Gizlinlik syýasaty
+        </h2>
+        <button class="privacy-modal-close" id="privacyModalClose" type="button">
+         ✕
+        </button>
+       </div>
+       <p>
+        <strong>
+         Konfigurasiýa gizlinligi:
+        </strong>
+        Siziň konfigurasiýa baglanyşyklaryňyz we abuna mazmuny gizlin.
+       </p>
+       <p>
+        <strong>
+         Hosting:
+        </strong>
+        Hyzmaty işletmek üçin maglumatlaryňyz bu hosting serwerinde saklanyp bilner.
+       </p>
+       <p>
+        <strong>
+         Siziň saýlawyňyz:
+        </strong>
+        Girişden öň bu syýasaty okamaly we kabul etmeli.
+       </p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- REGISTER MODAL -->
+  <div class="modal-overlay" id="registerModal">
+   <div class="modal-card" style="max-width:440px;">
+    <div class="modal-header">
+     <h3 class="modal-title">
+      Täze hasap aç
+     </h3>
+     <button class="modal-close-btn" id="btnCloseRegisterModal">
+      <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+       <line x1="18" x2="6" y1="6" y2="18">
+       </line>
+       <line x1="6" x2="18" y1="6" y2="18">
+       </line>
+      </svg>
+     </button>
+    </div>
+    <div class="register-info-box">
+     📌
+     <b>
+      Täze paneller:
+     </b>
+     <br/>
+     •
+     <b>
+      20 gün
+     </b>
+     möhletli döredilýär
+     <br/>
+     • Müşderi
+     <b>
+      limit çäksiz
+     </b>
+     <br/>
+     • Möhleti gutarandan soň admina ýüz tutmaly
+    </div>
+    <form autocomplete="off" id="registerForm">
+     <div class="form-group">
+      <label class="form-label">
+       Panel ady
+      </label>
+      <input autocomplete="off" id="regPanelName" placeholder="meselem: Mypanel-1" required="" type="text"/>
+     </div>
+     <div class="form-group">
+      <label class="form-label">
+       Kod (parol)
+      </label>
+      <input autocomplete="off" id="regPanelPass" placeholder="Kod giriziň" required="" type="text"/>
+     </div>
+     <button class="submit-btn" id="btnRegisterSubmit" type="submit">
+      Hasap Aç
+     </button>
+    </form>
+   </div>
+  </div>
+  <!-- DASHBOARD VIEW -->
+  <div class="view-section" id="dashboardView">
+   <div class="dashboard-layout">
+    <aside id="sidebar">
+     <div class="sidebar-header">
+      <span class="sidebar-logo" id="panelNameLabel">
+       Best Panel
+      </span>
+      <div style="display:flex;gap:4px;">
+       <button class="toggle-sidebar-btn" id="sidebarToggle">
+        <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+         <line x1="3" x2="21" y1="12" y2="12">
+         </line>
+         <line x1="3" x2="21" y1="6" y2="6">
+         </line>
+         <line x1="3" x2="21" y1="18" y2="18">
+         </line>
+        </svg>
+       </button>
+      </div>
+     </div>
+     <div class="sidebar-nav">
+      <button class="nav-item active" data-page="subscriptionsPage">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M9 17H7A5 5 0 0 1 7 7h2">
+        </path>
+        <path d="M15 7h2a5 5 0 1 1 0 10h-2">
+        </path>
+        <line x1="8" x2="16" y1="12" y2="12">
+        </line>
+       </svg>
+       <span>
+        Abunalar
+       </span>
+      </button>
+      <button class="nav-item" data-page="vpnCodesPage">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <polyline points="16 18 22 12 16 6">
+        </polyline>
+        <polyline points="8 6 2 12 8 18">
+        </polyline>
+       </svg>
+       <span>
+        VPN Kodlarym
+       </span>
+      </button>
+      <button class="nav-item" data-page="groupsPage">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+        </path>
+       </svg>
+       <span>
+        Toparlar
+       </span>
+      </button>
+      <button class="nav-item" data-page="historyPage">
+       <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+        <circle cx="12" cy="12" r="10">
+        </circle>
+        <polyline points="12 6 12 12 16 14">
+        </polyline>
+       </svg>
+       <span>
+        Taryh
+       </span>
+      </button>
+      <button class="nav-item" data-page="settingsPage">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <circle cx="12" cy="12" r="3">
+        </circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+        </path>
+       </svg>
+       <span>
+        Sazlamalar
+       </span>
+      </button>
+      <button class="nav-item" data-page="creatorHomePage" id="navCreatorHome" style="display:none;">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z">
+        </path>
+        <polyline points="9 22 9 12 15 12 15 22">
+        </polyline>
+       </svg>
+       <span>
+        Baş Sahypa
+       </span>
+      </button>
+     </div>
+     <div class="sidebar-footer">
+      <button class="logout-btn" id="btnLogout">
+       <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+        </path>
+        <polyline points="16 17 21 12 16 7">
+        </polyline>
+        <line x1="21" x2="9" y1="12" y2="12">
+        </line>
+       </svg>
+       <span class="logout-text">
+        Çykmak
+       </span>
+      </button>
+     </div>
+    </aside>
+    <main>
+     <div class="dashboard-content">
+      <!-- SUBSCRIPTIONS PAGE -->
+      <div class="dashboard-page active" id="subscriptionsPage">
+       <div class="dashboard-header">
+        <div class="dashboard-title">
+         <h1>
+          Abunalar
+         </h1>
+         <p>
+          Abunalaryňyzy dolandyryň
+         </p>
+        </div>
+        <button class="btn-primary" id="btnOpenNewSub">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <line x1="12" x2="12" y1="5" y2="19">
+          </line>
+          <line x1="5" x2="19" y1="12" y2="12">
+          </line>
+         </svg>
+         Täze abuna
+        </button>
+       </div>
+       <div class="stats-row">
+        <div class="stat-card">
+         <div class="stat-card-top">
+          <span class="stat-dot dot-blue">
+          </span>
+          <span class="stat-label">
+           Jemi abunalar
+          </span>
+         </div>
+         <div class="stat-value" id="statValueTotal">
+          0
+         </div>
+        </div>
+        <div class="stat-card">
+         <div class="stat-card-top">
+          <span class="stat-dot dot-green">
+          </span>
+          <span class="stat-label">
+           Işjeň
+          </span>
+         </div>
+         <div class="stat-value" id="statValueActive">
+          0
+         </div>
+        </div>
+        <div class="stat-card">
+         <div class="stat-card-top">
+          <span class="stat-dot dot-yellow">
+          </span>
+          <span class="stat-label">
+           Möhleti gutarýan
+          </span>
+         </div>
+         <div class="stat-value" id="statValueExpiring">
+          0
+         </div>
+        </div>
+        <div class="stat-card">
+         <div class="stat-card-top">
+          <span class="stat-dot dot-purple">
+          </span>
+          <span class="stat-label">
+           Jemi config
+          </span>
+         </div>
+         <div class="stat-value" id="statValueConfigs">
+          0
+         </div>
+        </div>
+       </div>
+       <!-- NEW SUB MODAL -->
+       <div class="modal-overlay" id="newSubModal">
+        <div class="modal-card">
+         <div class="modal-header">
+          <h3 class="modal-title">
+           Täze abuna döret
+          </h3>
+          <button class="modal-close-btn" id="btnCloseModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <form id="newSubForm">
+          <div class="form-grid-2">
+           <div class="form-group">
+            <label class="form-label">
+             Abuna ady
+            </label>
+            <input id="subName" placeholder="meselem: müşderi-vip" required="" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Profil ady
+            </label>
+            <input id="profileTitle" placeholder="meselem: VIP abuna profili" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Web sahypa URL
+            </label>
+            <input id="webPageUrl" placeholder="https://example.com" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Goldaw URL
+            </label>
+            <input id="supportUrl" placeholder="https://t.me/support" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Çäk
+            </label>
+            <div class="ios-select-wrapper" style="width:100%;">
+             <div class="ios-select-btn" id="limitSelectBtn">
+              <span id="limitSelectedText">
+               Çäksiz
+              </span>
+              <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+               <polyline points="6 9 12 15 18 9">
+               </polyline>
+              </svg>
+             </div>
+             <div class="ios-dropdown" id="limitDropdown">
+              <div class="ios-option" data-value="0">
+               Çäksiz
+              </div>
+              <div class="ios-option" data-value="1">
+               1 GB
+              </div>
+              <div class="ios-option" data-value="5">
+               5 GB
+              </div>
+              <div class="ios-option" data-value="10">
+               10 GB
+              </div>
+              <div class="ios-option" data-value="20">
+               20 GB
+              </div>
+              <div class="ios-option" data-value="30">
+               30 GB
+              </div>
+              <div class="ios-option" data-value="50">
+               50 GB
+              </div>
+              <div class="ios-option" data-value="100">
+               100 GB
+              </div>
+             </div>
+            </div>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Enjam limiti (HWID)
+            </label>
+            <input id="hwidLimit" min="0" placeholder="0 = ∞" step="1" type="number"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Dowamlylyk / Möhlet
+            </label>
+            <div class="ios-select-wrapper" style="width:100%;">
+             <div class="ios-select-btn" id="durationSelectBtn">
+              <span id="durationSelectedText">
+               30 Gün
+              </span>
+              <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+               <polyline points="6 9 12 15 18 9">
+               </polyline>
+              </svg>
+             </div>
+             <div class="ios-dropdown" id="durationDropdown">
+              <div class="ios-option" data-value="1">
+               1 Gün
+              </div>
+              <div class="ios-option" data-value="3">
+               3 Gün
+              </div>
+              <div class="ios-option" data-value="7">
+               7 Gün
+              </div>
+              <div class="ios-option" data-value="15">
+               15 Gün
+              </div>
+              <div class="ios-option" data-value="30">
+               30 Gün
+              </div>
+              <div class="ios-option" data-value="60">
+               60 Gün
+              </div>
+              <div class="ios-option" data-value="90">
+               90 Gün
+              </div>
+              <div class="ios-option" data-value="99999">
+               Çäksiz
+              </div>
+              <div class="ios-option full-width" data-value="custom">
+               Öz (Gün)
+              </div>
+             </div>
+            </div>
+            <input id="customDurationInput" min="1" placeholder="Günleri giriziň" style="display:none;margin-top:8px;" type="number"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Täzelenme aralygy (sagat)
+            </label>
+            <div class="ios-select-wrapper" style="width:100%;">
+             <div class="ios-select-btn" id="intervalSelectBtn">
+              <span id="intervalSelectedText">
+               1 Sagat
+              </span>
+              <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+               <polyline points="6 9 12 15 18 9">
+               </polyline>
+              </svg>
+             </div>
+             <div class="ios-dropdown" id="intervalDropdown">
+              <div class="ios-option" data-value="1">
+               1 Sagat
+              </div>
+              <div class="ios-option" data-value="6">
+               6 Sagat
+              </div>
+              <div class="ios-option" data-value="12">
+               12 Sagat
+              </div>
+              <div class="ios-option" data-value="24">
+               24 Sagat
+              </div>
+              <div class="ios-option" data-value="48">
+               48 Sagat
+              </div>
+             </div>
+            </div>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Bildiriş
+            </label>
+            <input id="announcement" placeholder="Möhüm habar..." type="text"/>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Bellik (islege görä)
+            </label>
+            <input id="subNote" placeholder="Goşmaça bellikler..." type="text"/>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             VPN kodlary (siziň "VPN Kodlarym" bölümindäki)
+            </label>
+            <p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">
+             Kodlar "VPN Kodlarym" bölüminden alynýar we awtomatik goşulýar.
+            </p>
+            <div id="newSubCodesPreview" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:10px;padding:12px;max-height:280px;overflow-y:auto;">
+             <p style="color:var(--text-secondary);font-size:12px;text-align:center;padding:10px;">
+              Ýüklenýär...
+             </p>
+            </div>
+           </div>
+          </div>
+          <button class="submit-btn" id="btnSaveSub" style="margin-top:10px;" type="submit">
+           Abuny sakla
+          </button>
+         </form>
+        </div>
+       </div>
+       <!-- EDIT SUB MODAL -->
+       <div class="modal-overlay" id="editSubModal">
+        <div class="modal-card">
+         <div class="modal-header">
+          <h3 class="modal-title">
+           Abuny üýtget
+          </h3>
+          <button class="modal-close-btn" id="btnCloseEditModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <form id="editSubForm">
+          <div class="form-grid-2">
+           <div class="form-group">
+            <label class="form-label">
+             Abuna ady
+            </label>
+            <input id="editSubName" required="" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Profil ady
+            </label>
+            <input id="editProfileTitle" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Web sahypa URL
+            </label>
+            <input id="editWebPageUrl" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Goldaw URL
+            </label>
+            <input id="editSupportUrl" type="text"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Çäk (GB, 0 = çäksiz)
+            </label>
+            <input id="editLimitGb" min="0" placeholder="meselem: 10" step="0.1" type="number"/>
+           </div>
+           <div class="form-group">
+            <label class="form-label">
+             Enjam limiti (HWID)
+            </label>
+            <input id="editHwidLimit" min="0" placeholder="0 = ∞" step="1" type="number"/>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Bildiriş
+            </label>
+            <input id="editAnnouncement" type="text"/>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Bellik
+            </label>
+            <input id="editSubNote" type="text"/>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Ulanyş
+            </label>
+            <div class="usage-stats-box">
+             <div class="usage-row">
+              <span class="usage-label">
+               Ýükleme
+              </span>
+              <span class="usage-value" id="usageUploadVal">
+               0 B
+              </span>
+             </div>
+             <div class="usage-row">
+              <span class="usage-label">
+               Ýüklemek
+              </span>
+              <span class="usage-value" id="usageDownloadVal">
+               0 B
+              </span>
+             </div>
+             <div class="usage-row">
+              <span class="usage-label">
+               Jemi ulanyldy
+              </span>
+              <span class="usage-value" id="usageTotalVal">
+               0 B
+              </span>
+             </div>
+             <div class="usage-row">
+              <span class="usage-label">
+               Çäk
+              </span>
+              <span class="usage-value" id="usageLimitVal">
+               ∞
+              </span>
+             </div>
+             <div class="usage-row">
+              <span class="usage-label">
+               Galan
+              </span>
+              <span class="usage-value" id="usageRemainingVal">
+               ∞
+              </span>
+             </div>
+             <div class="usage-progress-wrap">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);">
+               <span>
+                Ösüş
+               </span>
+               <span id="usagePercentVal">
+                0%
+               </span>
+              </div>
+              <div class="usage-progress-track">
+               <div class="usage-progress-fill low" id="usageProgressFill" style="width:0%">
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             Çatylan enjamlar (HWID)
+            </label>
+            <div class="hwids-list-box">
+             <div class="hwid-counter">
+              <span class="hwid-counter-label">
+               Çatylan
+              </span>
+              <span class="hwid-counter-value" id="hwidCountVal">
+               0 / ∞
+              </span>
+             </div>
+             <div id="editHwidsListInner">
+             </div>
+            </div>
+           </div>
+           <div class="form-group form-grid-full">
+            <label class="form-label">
+             VPN kodlary (diňe şu abuna degişli)
+            </label>
+            <p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">
+             Kodlar gizlin. Diňe atlar görünýär.
+            </p>
+            <div id="editCodesNamesWrap" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:10px;padding:12px;max-height:280px;overflow-y:auto;">
+            </div>
+           </div>
+          </div>
+          <button class="submit-btn" id="btnUpdateSub" style="margin-top:10px;" type="submit">
+           Abuny täzele
+          </button>
+         </form>
+        </div>
+       </div>
+       <!-- VIEW SUB MODAL -->
+       <div class="modal-overlay" id="viewSubModal">
+        <div class="modal-card">
+         <div class="modal-header">
+          <h3 class="modal-title">
+           Abuna maglumatlary
+          </h3>
+          <button class="modal-close-btn" id="btnCloseViewModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <div class="view-details-grid">
+          <div class="view-detail-item">
+           <div class="view-detail-label">
+            Ady
+           </div>
+           <div class="view-detail-value" id="viewName">
+           </div>
+          </div>
+          <div class="view-detail-item">
+           <div class="view-detail-label">
+            Profil ady
+           </div>
+           <div class="view-detail-value" id="viewProfileTitle">
+           </div>
+          </div>
+          <div class="view-detail-item full-width">
+           <div class="view-detail-label">
+            Abuna URL
+           </div>
+           <div class="view-detail-value" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+            <input id="viewSubUrl" readonly="" style="flex:1;padding:6px 10px;background:var(--input-bg);border:1px solid var(--border-color);border-radius:6px;color:var(--text-main);font-size:12px;outline:0;min-width:0;" type="text"/>
+            <button class="btn-outline" id="btnCopyViewUrl" style="padding:6px 10px;">
+             Göçür
+            </button>
+           </div>
+          </div>
+          <div class="view-detail-item">
+           <div class="view-detail-label">
+            Çäk
+           </div>
+           <div class="view-detail-value" id="viewLimit">
+            -
+           </div>
+          </div>
+          <div class="view-detail-item">
+           <div class="view-detail-label">
+            HWID limit
+           </div>
+           <div class="view-detail-value" id="viewHwidLimit">
+            -
+           </div>
+          </div>
+          <div class="view-detail-item full-width">
+           <div class="view-detail-label">
+            VPN kod atlary
+           </div>
+           <div class="view-detail-value" id="viewCodesNamesList" style="font-size:12px;line-height:1.8;">
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- QR MODAL -->
+       <div class="modal-overlay" id="qrModal">
+        <div class="modal-card" style="max-width:380px;text-align:center;">
+         <div class="modal-header">
+          <h3 class="modal-title">
+           Abuna QR kody
+          </h3>
+          <button class="modal-close-btn" id="btnCloseQrModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <div class="qr-container">
+          <div class="qr-box">
+           <img alt="QR" id="qrImage" src="" style="width:200px;height:200px;display:block;"/>
+          </div>
+          <p id="qrSubNameText" style="font-size:12px;color:var(--text-secondary);">
+           Abuny import etmek üçin skanirläň
+          </p>
+         </div>
+         <button class="submit-btn" id="btnCloseQrBtn" type="button">
+          Ýap
+         </button>
+        </div>
+       </div>
+       <div style="display:flex;gap:10px;margin-bottom:22px;">
+        <div class="search-box">
+         <svg fill="none" height="14" stroke="currentColor" stroke-width="2" style="color:var(--text-secondary);opacity:.7;flex-shrink:0;" viewbox="0 0 24 24" width="14">
+          <circle cx="11" cy="11" r="8">
+          </circle>
+          <line x1="21" x2="16.65" y1="21" y2="16.65">
+          </line>
+         </svg>
+         <input autocomplete="off" id="searchInput" placeholder="Abunalary gözle..." type="text"/>
+        </div>
+       </div>
+       <div class="table-container">
+        <table>
+         <thead>
+          <tr>
+           <th style="width:60px;">
+            #
+           </th>
+           <th>
+            Ady
+           </th>
+           <th>
+            Möhleti
+           </th>
+           <th>
+            Config
+           </th>
+           <th>
+            Ýagdaý
+           </th>
+           <th>
+            Ulanyş
+           </th>
+           <th>
+            Çäk
+           </th>
+           <th>
+            Hereketler
+           </th>
+          </tr>
+         </thead>
+         <tbody id="subsTableBody">
+         </tbody>
+        </table>
+        <div class="pagination-row" id="paginationRow">
+         <div class="pagination-info" id="paginationInfo">
+          Zat ýok
+         </div>
+         <div class="pagination-btns" id="paginationBtns">
+         </div>
+        </div>
+       </div>
+       <div class="subs-empty" id="subsEmptyState" style="display:none;">
+        <svg fill="none" height="40" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="40">
+         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
+         </path>
+         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
+         </path>
+        </svg>
+        <p>
+         Entek abuna ýok. Başlamak üçin ilkinji abunyňyzy dörediň.
+        </p>
+       </div>
+      </div>
+      <!-- VPN CODES PAGE -->
+      <div class="dashboard-page" id="vpnCodesPage">
+       <div class="dashboard-header">
+        <div class="dashboard-title">
+         <h1>
+          VPN Kodlarym
+         </h1>
+         <p>
+          Kodlary goşuň, adyny we tertibini üýtgediň — awtomatik ähli abunalara goşulýar
+         </p>
+        </div>
+        <button class="btn-danger" id="btnDeleteAllCodes">
+         <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+          <polyline points="3 6 5 6 21 6">
+          </polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6">
+          </path>
+         </svg>
+         Ählisini Poz
+        </button>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <circle cx="12" cy="12" r="10">
+          </circle>
+          <line x1="12" x2="12" y1="8" y2="16">
+          </line>
+          <line x1="8" x2="16" y1="12" y2="12">
+          </line>
+         </svg>
+         Täze VPN Kod Goş
+        </div>
+        <p style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">
+         Birnäçe kod ýa-da https podpiska linki goýsaňyz — ulgam özi süzüp alýar. Goşulan kodlar awtomatik ähli abunalaryň içine hem goşulýar.
+        </p>
+        <div class="form-grid-2">
+         <div class="form-group">
+          <label class="form-label">
+           VPN kody / Link
+          </label>
+          <textarea id="newCodeLink" placeholder="vless://...
+vmess://...
+trojan://...
+ss://...
+ssh://...
+hysteria://...
+hysteria2://...
+ýa-da https://podpiska-linki" rows="4" style="min-height:100px;font-family:monospace;font-size:11px;"></textarea>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Ady (islege görä, 1 kod bolsa)
+          </label>
+          <input id="newCodeName" placeholder="meselem: Germany-1" type="text"/>
+          <p style="font-size:10px;color:var(--text-secondary);margin-top:6px;">
+           Boş goýsaňyz, linkdäki ady ulanylar.
+          </p>
+         </div>
+        </div>
+        <button class="btn-primary" id="btnAddCode" style="margin-top:14px;">
+         <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+          <line x1="12" x2="12" y1="5" y2="19">
+          </line>
+          <line x1="5" x2="19" y1="12" y2="12">
+          </line>
+         </svg>
+         Kod Goş
+        </button>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <polyline points="16 18 22 12 16 6">
+          </polyline>
+          <polyline points="8 6 2 12 8 18">
+          </polyline>
+         </svg>
+         Meniň VPN Kodlarym
+         <span id="myCodesCount" style="background:rgba(59,130,246,.15);color:#3b82f6;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;margin-left:8px;">
+          0
+         </span>
+        </div>
+        <div class="code-stats-bar" id="myCodesStatsBar">
+        </div>
+        <button class="btn-success" id="btnSaveCodeEdits" style="margin-bottom:14px;width:100%;justify-content:center;">
+         <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z">
+          </path>
+          <polyline points="17 21 17 13 7 13 7 21">
+          </polyline>
+         </svg>
+         Üýtgeşmeleri Sakla &amp; Abunalara Paýla
+        </button>
+        <div id="myCodesList" style="max-height:700px;overflow-y:auto;">
+         <div class="empty-state">
+          <p>
+           Ýüklenýär...
+          </p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- GROUPS PAGE -->
+      <div class="dashboard-page" id="groupsPage">
+       <div class="dashboard-header">
+        <div class="dashboard-title">
+         <h1>
+          Toparlar
+         </h1>
+         <p>
+          Islendik abuna çekip biljek gaýtadan ulanylýan konfig toplumlary
+         </p>
+        </div>
+        <button class="btn-primary" id="btnOpenNewGroup">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <line x1="12" x2="12" y1="5" y2="19">
+          </line>
+          <line x1="5" x2="19" y1="12" y2="12">
+          </line>
+         </svg>
+         Täze topar
+        </button>
+       </div>
+       <div class="groups-grid" id="groupsGrid">
+       </div>
+       <div class="groups-empty" id="groupsEmptyState" style="display:none;">
+        <p>
+         Entek topar ýok.
+        </p>
+       </div>
+       <div class="modal-overlay" id="newGroupModal">
+        <div class="modal-card">
+         <div class="modal-header">
+          <h3 class="modal-title">
+           Täze topar döret
+          </h3>
+          <button class="modal-close-btn" id="btnCloseNewGroupModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <form id="newGroupForm">
+          <div class="form-group">
+           <label class="form-label">
+            Topar ady
+           </label>
+           <input id="groupNameInput" placeholder="meselem: Striming konfigler" required="" type="text"/>
+          </div>
+          <div class="form-group">
+           <label class="form-label">
+            Konfigler
+           </label>
+           <textarea id="groupConfigsInput" placeholder="vless://...
+vmess://..."></textarea>
+          </div>
+          <button class="submit-btn" type="submit">
+           Topar döret
+          </button>
+         </form>
+        </div>
+       </div>
+       <div class="modal-overlay" id="groupDetailModal">
+        <div class="modal-card">
+         <div class="modal-header">
+          <h3 class="modal-title" id="groupDetailTitle">
+           Topar maglumatlary
+          </h3>
+          <button class="modal-close-btn" id="btnCloseGroupDetailModal">
+           <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+            <line x1="18" x2="6" y1="6" y2="18">
+            </line>
+            <line x1="6" x2="18" y1="6" y2="18">
+            </line>
+           </svg>
+          </button>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Bu topardaky konfigler
+          </label>
+          <textarea id="groupDetailConfigsText" readonly="" style="min-height:120px;"></textarea>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Goşmaly täze konfigler
+          </label>
+          <textarea id="detailGroupConfigsInput" placeholder="vless://..."></textarea>
+         </div>
+         <button class="submit-btn" id="btnAddToGroup" type="button">
+          Topara goş
+         </button>
+         <button class="submit-btn" id="btnDeleteGroup" style="background:rgba(239,68,68,.15);color:#ef4444;" type="button">
+          Topary poz
+         </button>
+        </div>
+       </div>
+      </div>
+      <!-- SETTINGS PAGE -->
+      <div class="dashboard-page" id="settingsPage">
+       <div class="dashboard-header">
+        <div class="dashboard-title">
+         <h1>
+          Sazlamalar
+         </h1>
+         <p>
+          Täze abunalar üçin deslapky bahalary sazlaň
+         </p>
+        </div>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
+          </path>
+         </svg>
+         Abuna deslapky bahalary
+        </div>
+        <div class="settings-grid">
+         <div class="form-group">
+          <label class="form-label">
+           Deslapky profil ady
+          </label>
+          <input id="settingsProfileTitle" type="text"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Deslapky goldaw URL
+          </label>
+          <input id="settingsSupportUrl" type="text"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Deslapky web sahypa URL
+          </label>
+          <input id="settingsWebPageUrl" type="text"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Deslapky bildiriş
+          </label>
+          <input id="settingsAnnouncement" type="text"/>
+         </div>
+         <div class="form-group settings-grid-full">
+          <label class="form-label">
+           Deslapky bellik
+          </label>
+          <input id="settingsNote" type="text"/>
+         </div>
+        </div>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z">
+          </path>
+         </svg>
+         Howpsuzlyk
+        </div>
+        <div class="form-group">
+         <label class="form-label">
+          Paroly üýtget
+         </label>
+         <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input id="settingsNewPassword" placeholder="Täze parol (min 5 belgi)" style="flex:1;min-width:150px;" type="password"/>
+          <button class="btn-primary" id="btnChangePassword" type="button">
+           Paroly täzele
+          </button>
+         </div>
+        </div>
+       </div>
+       <button class="submit-btn" id="btnSaveSettings" style="max-width:100%;" type="button">
+        Sazlamalary sakla
+       </button>
+      </div>
+      <!-- HISTORY PAGE -->
+      <div class="dashboard-page" id="historyPage">
+       <div class="dashboard-content">
+        <div class="dashboard-header">
+         <div class="dashboard-title">
+          <h1>
+           Işjeňlik žurnaly
+          </h1>
+          <p>
+           Abunalaryňyzdaky ähli üýtgeşmeleri yzarlaň
+          </p>
+         </div>
+         <button class="btn-primary" id="btnClearHistory" type="button">
+          <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+           <polyline points="3 6 5 6 21 6">
+           </polyline>
+           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6">
+           </path>
+          </svg>
+          Žurnaly arassala
+         </button>
+        </div>
+        <div class="table-container">
+         <div class="timeline-list" id="historyList" style="padding:16px;">
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- CREATOR HOME PAGE -->
+      <div class="dashboard-page" id="creatorHomePage">
+       <div class="dashboard-header">
+        <div class="dashboard-title">
+         <h1>
+          Baş Sahypa
+         </h1>
+         <p>
+          Panel dörediji dolandyryş merkezi
+         </p>
+        </div>
+       </div>
+       <div class="settings-section" id="creatorExpiryBanner" style="display:none;border-color:rgba(234,179,8,.5);background:rgba(234,179,8,.05);text-align:center;">
+        <p id="creatorExpiryBannerText" style="font-weight:600;font-size:13px;">
+        </p>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         Täze Panel Döret
+        </div>
+        <div class="settings-grid">
+         <div class="form-group">
+          <label class="form-label">
+           Paneliň ady
+          </label>
+          <input id="creatorNewPanelName" placeholder="meselem: MyPanel-1" type="text"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Parol
+          </label>
+          <input id="creatorNewPanelPass" placeholder="Parol" type="text"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Müşderi limiti
+          </label>
+          <input id="creatorNewPanelLimit" placeholder="meselem: 20" type="number"/>
+         </div>
+         <div class="form-group">
+          <label class="form-label">
+           Möhleti (gün ýa-da 31.12.2025)
+          </label>
+          <input id="creatorNewPanelExpiry" placeholder="meselem: 30" type="text"/>
+         </div>
+        </div>
+        <button class="btn-primary" id="creatorCreatePanelBtn" style="margin-top:14px;">
+         <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+          <line x1="12" x2="12" y1="5" y2="19">
+          </line>
+          <line x1="5" x2="19" y1="12" y2="12">
+          </line>
+         </svg>
+         Döret
+        </button>
+        <p id="creatorLimitInfo" style="font-size:12px;color:var(--text-secondary);margin-top:10px;">
+        </p>
+       </div>
+       <div class="settings-section">
+        <div class="settings-section-title">
+         Siziň Panelleriňiz
+        </div>
+        <div id="creatorPanelsList" style="max-height:500px;overflow-y:auto;">
+         <p style="text-align:center;color:var(--text-secondary);padding:20px;">
+          Ýüklenýär...
+         </p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div>
+  </div>
+  <!-- EXPIRED OVERLAY (full screen red) -->
+  <div class="expired-overlay" id="expiredOverlay">
+   <div class="expired-content">
+    <div class="expired-icon">
+     <svg fill="none" height="42" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="42">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+      </path>
+      <line x1="12" x2="12" y1="9" y2="13">
+      </line>
+      <line x1="12" x2="12.01" y1="17" y2="17">
+      </line>
+     </svg>
+    </div>
+    <div class="expired-info-badge">
+     ⚠️ ÜNS BERIŇ
+    </div>
+    <div class="expired-title">
+     Paneliň wagty doldy
+    </div>
+    <div class="expired-text">
+     Paneliňiziň möhleti gutardy. Dowam etmek üçin admin bilen habarlaşyň we möhleti uzaldyň.
+     <br/>
+     <br/>
+     Möhlet uzaldylandan soň ähli VPN kodlar we funksiýalar öňki ýaly işleýär.
+    </div>
+    <a class="expired-support-btn" href="#" id="expiredSupportBtn" target="_blank">
+     <svg fill="none" height="16" stroke="currentColor" stroke-width="2.4" viewbox="0 0 24 24" width="16">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+      </path>
+     </svg>
+     Admina ýüz tutmak
+    </a>
+    <button class="expired-logout-btn" id="expiredLogoutBtn">
+     Ulgamdan çykmak
+    </button>
+   </div>
+  </div>
+  <!-- CONFIRM DELETE MODAL -->
+  <div class="confirm-modal" id="confirmDeleteModal">
+   <div class="confirm-modal-card">
+    <div class="confirm-modal-title" id="confirmDeleteTitle">
+     Pozmalymy?
+    </div>
+    <div class="confirm-modal-text" id="confirmDeleteText">
+     Bu hereket yzyna gaýtarylmaýar.
+    </div>
+    <div class="confirm-modal-actions">
+     <button class="btn-confirm-cancel" id="btnCancelDelete">
+      Ýatyr
+     </button>
+     <button class="btn-confirm-delete" id="btnConfirmDelete">
+      Poz
+     </button>
+    </div>
+   </div>
+  </div>
+  <div class="toast-container" id="toastContainer">
+  </div>
+  <script>
+   /* ============== FIREBASE ============== */
+const firebaseConfig = {
+    apiKey: "AIzaSyB1O7BfHk9_xpdqotj0NYN-dyYWBBxvRCE",
+    authDomain: "brian-network.firebaseapp.com",
+    databaseURL: "https://brian-network-default-rtdb.firebaseio.com",
+    projectId: "brian-network",
+    storageBucket: "brian-network.firebasestorage.app",
+    messagingSenderId: "770314615475",
+    appId: "1:770314615475:web:3bf2318e936f6feb244ec6",
+    measurementId: "G-C599G8S0JJ"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* ============== GLOBAL STATE ============== */
+let SUB_DOMAIN = "https://brian.panelbrianonline.workers.dev/sub";
+let SUPPORT_URL = "https://t.me/besttvpns";
+let currentPanel = "";
+let currentPanelData = {};
+let isCreator = false;
+let currentCreatorUsername = "";
+let currentCreatorLimit = 0;
+let currentCreatorPanelsCount = 0;
+let currentCreatorExpiresAt = null;
+let myCodesList = [];
+let allSubs = [];
+let currentPage = 1;
+const PAGE_SIZE = 10;
+let currentSearch = '';
+let editingSubId = null;
+let deleteTargetId = null;
+let deleteTargetType = 'sub';
+let isSyncingCodes = false;
+let pendingSyncTimer = null;
+let isPanelExpired = false;
+let expiredWatchInterval = null;
+
+const REGISTER_DEFAULT_DAYS = 20;
+const REGISTER_UNLIMITED_LIMIT = 999999;
+const EXPIRED_FLAG_KEY = 'bulut_expired_panel';
+
+/* ============== HELPERS ============== */
+function escHtml(s){if(s===null||s===undefined) return "";return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function getSafeArray(data){if(!data) return [];if(Array.isArray(data)) return data.filter(i=>i!==null);return Object.values(data).filter(i=>i!==null);}
+function gbToBytes(gb){if(!gb||gb<=0) return 0;return Math.round(gb*1024*1024*1024);}
+function parseDaysFromWagt(wagt){if(!wagt) return null;const m=String(wagt).match(/(\d{2})\.(\d{2})\.(\d{4})/);if(!m) return null;const d=new Date(parseInt(m[3]),parseInt(m[2])-1,parseInt(m[1]),23,59,59);return Math.max(0,Math.ceil((d-Date.now())/(24*60*60*1000)));}
+function daysToExpiresString(days){let num=parseInt(days)||30;if(num>10000) return "expires: 01.01.2099";let expireMs=Date.now()+num*24*60*60*1000;let d=new Date(expireMs);return "expires: "+String(d.getDate()).padStart(2,'0')+"."+String(d.getMonth()+1).padStart(2,'0')+"."+d.getFullYear();}
+function daysToTimestamp(days){let num=parseInt(days)||30;if(num>10000) num=36500;return Math.floor((Date.now()+num*24*60*60*1000)/1000);}
+function getProto(link){if(!link) return null;let p=link.split('://')[0].toLowerCase();if(p.includes('vless'))return 'vless';if(p.includes('vmess'))return 'vmess';if(p.includes('trojan'))return 'trojan';if(p==='ss')return 'ss';if(p==='ssh')return 'ssh';if(p.includes('hysteria2')||p==='hy2')return 'hysteria2';if(p.includes('hysteria'))return 'hysteria';if(p.includes('tuic'))return 'tuic';return null;}
+function parseExpiryInput(input){if(!input) return null;input=input.trim();if(/^\d+$/.test(input)){let days=parseInt(input);if(days>0) return Date.now()+days*24*60*60*1000;}let m=input.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);if(m){let d=new Date(parseInt(m[3]),parseInt(m[2])-1,parseInt(m[1]),23,59,59);if(!isNaN(d.getTime())) return d.getTime();}return null;}
+function getExpiryStatus(expiresAt){if(!expiresAt) return "unlimited";let diff=expiresAt-Date.now();if(diff>0) return "active";if(diff>-3*24*60*60*1000) return "grace";return "shouldDelete";}
+function logActivity(action,details){if(!currentPanel&&!currentCreatorUsername) return;const key=currentPanel?`paneller/${currentPanel}/logs`:`panel_yaradyjylar/${currentCreatorUsername}/logs`;db.ref(key).push({action,user:currentPanel||currentCreatorUsername,details,timestamp:new Date().toISOString()}).catch(()=>{});}
+function formatBytes(b){if(!b || b<=0) return '0 B';const u = ['B','KB','MB','GB','TB','PB'];const i = Math.floor(Math.log(b) / Math.log(1024));const idx = Math.min(i, u.length-1);const val = b / Math.pow(1024, idx);return val.toFixed(val >= 100 ? 0 : (val >= 10 ? 1 : 2)) + ' ' + u[idx];}
+function getNameFromLink(link){if(!link) return '';const idx = link.indexOf('#');if(idx === -1) return '';const raw = link.substring(idx+1);try{ return decodeURIComponent(raw); }catch(e){ return raw; }}
+function getBaseFromLink(link){if(!link) return '';const idx = link.indexOf('#');return idx === -1 ? link : link.substring(0, idx);}
+function protoLabel(p){if(!p) return 'CODE';if(p==='hysteria2') return 'HY2';return p.toUpperCase();}
+function protoClass(p){if(p==='vless') return 'proto-vless';if(p==='vmess') return 'proto-vmess';if(p==='trojan') return 'proto-trojan';if(p==='ss'||p==='ssh') return 'proto-ss';if(p==='hysteria'||p==='hysteria2') return 'proto-hysteria';return 'proto-other';}
+
+function showToast(msg,isErr){
+    const c=document.getElementById('toastContainer');
+    const tEl=document.createElement('div');
+    tEl.className='toast-item'+(isErr?' toast-error':'');
+    tEl.innerHTML = isErr
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span></span>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span></span>';
+    tEl.querySelector('span').textContent=msg;
+    c.appendChild(tEl);
+    requestAnimationFrame(()=>tEl.classList.add('show'));
+    setTimeout(()=>{tEl.classList.remove('show');setTimeout(()=>tEl.remove(),250);},2600);
+}
+function copyToClipboard(text){
+    if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(text);
+    else{const tmp=document.createElement('textarea');tmp.value=text;tmp.style.position='fixed';tmp.style.opacity='0';document.body.appendChild(tmp);tmp.select();document.execCommand('copy');document.body.removeChild(tmp);}
+}
+
+/* ============== EXTRACT VPN CODES ============== */
+async function extractVpnCodes(rawInput){
+    let text = String(rawInput||'');
+    if(!text) return [];
+    if(/^https?:\/\//i.test(text.trim())){
+        const url = text.trim();
+        const proxies = [
+            `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+            `https://corsproxy.io/?${encodeURIComponent(url)}`
+        ];
+        let fetched = '';
+        for(const p of proxies){
+            try{const r=await fetch(p);if(r.ok){fetched=await r.text();break;}}catch(e){}
+        }
+        if(fetched){
+            let decoded = fetched.trim();
+            try{
+                if(!/vless:\/\/|vmess:\/\/|trojan:\/\/|ss:\/\/|ssh:\/\/|hysteria:\/\/|hysteria2:\/\/|hy2:\/\//i.test(decoded)){
+                    decoded = window.atob(decoded.replace(/\s/g,''));
+                }
+            }catch(e){}
+            text = decoded;
+        }
+    }
+    const regex = /(vless|vmess|trojan|ss|ssh|hysteria|hysteria2|hy2):\/\/[^\s\r\n]+/g;
+    const extracted = [];
+    const seen = new Set();
+    let m;
+    while((m = regex.exec(text)) !== null){
+        const link = m[0].trim().replace(/<[^>]*>?/gm,'');
+        const base = link.split('#')[0];
+        if(seen.has(base)) continue;
+        seen.add(base);
+        extracted.push(link);
+    }
+    return extracted;
+}
+
+/* ============== SYNC ============== */
+function scheduleSyncCodesToSubs(delay = 400){
+    if(pendingSyncTimer) clearTimeout(pendingSyncTimer);
+    pendingSyncTimer = setTimeout(()=>{ syncMyCodesToAllSubs(); }, delay);
+}
+async function syncMyCodesToAllSubs(){
+    if(!currentPanel || isSyncingCodes || isPanelExpired) return;
+    isSyncingCodes = true;
+    try {
+        const codesSnap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+        const myData = codesSnap.exists()?codesSnap.val():{};
+        const myCodes = Object.keys(myData).map(id=>({
+            id, link:myData[id].link||'', name:myData[id].name||'',
+            order: typeof myData[id].order==='number'?myData[id].order:0,
+            createdAt: myData[id].createdAt||0
+        })).filter(c=>c.link);
+        myCodes.sort((a,b)=>{ if(a.order !== b.order) return a.order - b.order; return (a.createdAt||0)-(b.createdAt||0); });
+        const kodlar = myCodes.map(c=>{
+            const nm = c.name || getNameFromLink(c.link) || 'VPN Kod';
+            return {link:getBaseFromLink(c.link)+'#'+encodeURIComponent(nm),status:'işleýär'};
+        });
+
+        const subsSnap = await db.ref(`paneller/${currentPanel}/subs`).once('value');
+        if(!subsSnap.exists()){ isSyncingCodes = false; return; }
+        const updates = {};
+        subsSnap.forEach(sub=>{
+            const s = sub.val();
+            if(s.status==='Pozulan'||s.status==='Doňdurylan'||s.status==='Expired') return;
+            if(s.backup_kodlar) return;
+            updates[`subs/${sub.key}/kodlar`] = kodlar;
+        });
+        if(Object.keys(updates).length > 0){
+            await db.ref(`paneller/${currentPanel}`).update(updates);
+        }
+    } catch(e){ console.warn('Sync error:', e); }
+    finally { isSyncingCodes = false; }
+}
+
+/* ============== EXPIRED PANEL WATCHER ============== */
+function showExpiredOverlay(){
+    if(!isPanelExpired) return;
+    const overlay = document.getElementById('expiredOverlay');
+    if(!overlay) return;
+    // Update support URL
+    const btn = document.getElementById('expiredSupportBtn');
+    if(btn){
+        const href = SUPPORT_URL || 'https://t.me/';
+        btn.href = href;
+    }
+    overlay.classList.add('active');
+    // Ensure overlay covers everything
+    document.body.style.overflow = 'hidden';
+}
+function hideExpiredOverlay(){
+    const overlay = document.getElementById('expiredOverlay');
+    if(overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+async function checkPanelExpiredNow(){
+    if(!currentPanel || isCreator) return false;
+    try{
+        const snap = await db.ref('paneller/'+currentPanel).once('value');
+        if(!snap.exists()) return false;
+        const pd = snap.val();
+        if(pd.expiresAt && pd.expiresAt < Date.now()){
+            if(!isPanelExpired){
+                isPanelExpired = true;
+                // Save blocked flag for register check
+                try{
+                    localStorage.setItem(EXPIRED_FLAG_KEY, JSON.stringify({name: currentPanel, expiresAt: pd.expiresAt, at: Date.now()}));
+                }catch(e){}
+                // Trigger admin-side deactivation (only works if user has write access)
+                try{
+                    await deactivatePanelCodesLocal(currentPanel);
+                }catch(e){}
+                showExpiredOverlay();
+            }
+            return true;
+        } else {
+            // Panel not expired anymore
+            if(isPanelExpired){
+                isPanelExpired = false;
+                try{
+                    localStorage.removeItem(EXPIRED_FLAG_KEY);
+                }catch(e){}
+                // Trigger reactivate (only works if user has write access)
+                try{
+                    await reactivatePanelCodesLocal(currentPanel);
+                }catch(e){}
+                hideExpiredOverlay();
+                showToast('Paneliňiz uzaldyldy! Öňki ýaly işleýär.', false);
+                // Reload data
+                try{ await loadSubs(); await updateStats(); }catch(e){}
+            }
+            return false;
+        }
+    }catch(e){ return false; }
+}
+async function deactivatePanelCodesLocal(panelName){
+    // Mark subs as expired
+    const ref = db.ref('paneller/'+panelName);
+    const snap = await ref.once('value');
+    if(!snap.exists()) return;
+    const pd = snap.val();
+    if(pd.expired===true) return;
+    const subsSnap = await ref.child('subs').once('value');
+    if(subsSnap.exists()){
+        const updates = {};
+        subsSnap.forEach(sub=>{
+            const subId = sub.key;
+            const sd = sub.val();
+            if(sd.status==='Pozulan') return;
+            const dummy = "vless://00000000-0000-0000-0000-000000000000@0.0.0.0:0?encryption=none#Panelin%20wagty%20doldy";
+            updates['subs/'+subId+'/kodlar'] = [{link:dummy,status:'ýapylan'}];
+            updates['subs/'+subId+'/status'] = 'Expired';
+            updates['subs/'+subId+'/backup_kodlar'] = sd.kodlar||[];
+            updates['subs/'+subId+'/backup_status'] = sd.status;
+            updates['subs/'+subId+'/backup_profileTitle'] = sd.profileTitle||sd.ady;
+            const headerText = `#profile-title: 🚫 Panelin wagty doldy\n#subscription-userinfo: upload=0; download=0; total=0; expire=0\n`;
+            updates['subs/'+subId+'/kellelik_kody'] = headerText;
+            updates['subs/'+subId+'/header'] = headerText;
+            updates['subs/'+subId+'/profileTitle'] = '🚫 Panelin wagty doldy';
+        });
+        if(Object.keys(updates).length>0) await ref.update(updates);
+    }
+    await ref.update({expired:true});
+}
+async function reactivatePanelCodesLocal(panelName){
+    const ref = db.ref('paneller/'+panelName);
+    const snap = await ref.once('value');
+    if(!snap.exists()) return;
+    if(snap.val().expired!==true) return;
+    const subsSnap = await ref.child('subs').once('value');
+    if(subsSnap.exists()){
+        const updates = {};
+        subsSnap.forEach(sub=>{
+            const subId = sub.key;
+            const sd = sub.val();
+            if(sd.backup_kodlar){
+                updates['subs/'+subId+'/kodlar'] = sd.backup_kodlar;
+                updates['subs/'+subId+'/status'] = sd.backup_status||'Aktiw';
+                updates['subs/'+subId+'/profileTitle'] = sd.backup_profileTitle || sd.ady;
+                updates['subs/'+subId+'/backup_kodlar'] = null;
+                updates['subs/'+subId+'/backup_status'] = null;
+                updates['subs/'+subId+'/backup_profileTitle'] = null;
+            }
+        });
+        if(Object.keys(updates).length>0) await ref.update(updates);
+    }
+    await ref.update({expired:false});
+}
+
+function startExpiredWatcher(){
+    if(expiredWatchInterval) clearInterval(expiredWatchInterval);
+    expiredWatchInterval = setInterval(()=>{ checkPanelExpiredNow(); }, 15000);
+}
+
+/* ============== REGISTER BLOCK CHECK ============== */
+async function isUserBlockedFromRegister(){
+    try{
+        const raw = localStorage.getItem(EXPIRED_FLAG_KEY);
+        if(!raw) return false;
+        const blocked = JSON.parse(raw);
+        if(!blocked || !blocked.name) return false;
+        const snap = await db.ref('paneller/'+blocked.name).once('value');
+        if(!snap.exists()){
+            localStorage.removeItem(EXPIRED_FLAG_KEY);
+            return false;
+        }
+        const pd = snap.val();
+        if(!pd.expiresAt || pd.expiresAt > Date.now()){
+            // Extended → unblock
+            localStorage.removeItem(EXPIRED_FLAG_KEY);
+            return false;
+        }
+        // Still expired → block
+        return true;
+    }catch(e){
+        return false;
+    }
+}
+
+/* ============== PRIVACY ============== */
+document.getElementById('privacyConsent').addEventListener('change',(e)=>{if(e.target.checked){try{localStorage.setItem('bulut_privacy','1');}catch(err){}}});
+if(localStorage.getItem('bulut_privacy')==='1') document.getElementById('privacyConsent').checked = true;
+document.getElementById('privacyPolicyInfo').addEventListener('click',()=>{document.getElementById('privacyModal').classList.add('active');});
+document.getElementById('privacyModalClose').addEventListener('click',()=>{document.getElementById('privacyModal').classList.remove('active');});
+document.getElementById('privacyModal').addEventListener('click',(e)=>{if(e.target.id==='privacyModal') e.currentTarget.classList.remove('active');});
+
+/* ============== INIT ============== */
+(async function initConfig(){
+    try{
+        const d=await db.ref('sazlamalar/domen').once('value');
+        if(d.exists()) SUB_DOMAIN="https://brian.panelbrianonline.workers.dev/sub";
+        const s=await db.ref('sazlamalar/support_url').once('value');
+        if(s.exists()){
+            SUPPORT_URL=s.val();
+            const btn=document.getElementById('adminSupportBtn');
+            if(btn) btn.href=SUPPORT_URL;
+            const eBtn=document.getElementById('expiredSupportBtn');
+            if(eBtn) eBtn.href=SUPPORT_URL;
+        }
+    }catch(e){}
+    // Start the expired watcher
+    startExpiredWatcher();
+})();
+
+/* ============== EXPIRED OVERLAY BUTTONS ============== */
+document.getElementById('expiredLogoutBtn').addEventListener('click',()=>{
+    // Keep blocked flag in localStorage so user can't re-register
+    // (already set on expired detection)
+    doLogout();
+});
+
+function doLogout(){
+    if(expiredWatchInterval){ clearInterval(expiredWatchInterval); expiredWatchInterval=null; }
+    hideExpiredOverlay();
+    isPanelExpired = false;
+    currentPanel='';currentPanelData={};isCreator=false;currentCreatorUsername='';
+    document.body.classList.add('unauthenticated');
+    document.getElementById('authView').classList.add('active');
+    document.getElementById('dashboardView').classList.remove('active');
+}
+
+/* ============== LOGIN ============== */
+document.getElementById('loginForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    if(!document.getElementById('privacyConsent').checked){showToast('Ilki Gizlinlik syýasatyny kabul ediň.',true);return;}
+    const name=document.getElementById('loginUser').value.trim();
+    const pass=document.getElementById('loginPass').value.trim();
+    if(!name||!pass){showToast('Ähli meýdanlary dolduryň',true);return;}
+    showToast('Girilýär...');
+    const cSnap=await db.ref('panel_yaradyjylar/'+name).once('value');
+    if(cSnap.exists()&&cSnap.val().kod===pass){
+        const cData=cSnap.val();
+        const expiresAt=cData.expiresAt||null;
+        const status=getExpiryStatus(expiresAt);
+        if(status==='shouldDelete'){showToast('Döredijiniň möhleti gutardy we pozuldy',true);return;}
+        isCreator=true; currentCreatorUsername=name; currentPanel='';
+        currentCreatorLimit=cData.limit;
+        currentCreatorExpiresAt=expiresAt;
+        isPanelExpired = false;
+        enterDashboard(true);
+        return;
+    }
+    const cleanName=name.replace(/[.#$\[\]]/g,'');
+    const pSnap=await db.ref('paneller/'+cleanName).once('value');
+    if(pSnap.exists()&&pSnap.val().parol===pass){
+        const pd=pSnap.val();
+        currentPanel=cleanName; currentPanelData=pd; isCreator=false;
+        const expired = pd.expiresAt && pd.expiresAt < Date.now();
+        isPanelExpired = !!expired;
+        if(expired){
+            // Save flag for register block
+            try{
+                localStorage.setItem(EXPIRED_FLAG_KEY, JSON.stringify({name: cleanName, expiresAt: pd.expiresAt, at: Date.now()}));
+            }catch(e){}
+        } else {
+            try{ localStorage.removeItem(EXPIRED_FLAG_KEY); }catch(e){}
+        }
+        logActivity('login','Logged in');
+        enterDashboard(false);
+        return;
+    }
+    showToast('Nädogry ulanyjy ady ýa-da parol',true);
+});
+
+async function enterDashboard(asCreator){
+    document.body.classList.remove('unauthenticated');
+    document.getElementById('authView').classList.remove('active');
+    document.getElementById('dashboardView').classList.add('active');
+    if(asCreator){
+        document.getElementById('panelNameLabel').textContent='Creator Panel';
+        document.querySelectorAll('.nav-item').forEach(n=>{ if(n.dataset.page!=='creatorHomePage') n.style.display='none'; });
+        document.getElementById('navCreatorHome').style.display='flex';
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.getElementById('navCreatorHome').classList.add('active');
+        document.querySelectorAll('.dashboard-page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('creatorHomePage').classList.add('active');
+        loadCreatorData();
+    } else {
+        document.getElementById('panelNameLabel').textContent=currentPanel;
+        document.querySelectorAll('.nav-item').forEach(n=>{ if(n.dataset.page!=='creatorHomePage') n.style.display='flex'; });
+        document.getElementById('navCreatorHome').style.display='none';
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.querySelector('[data-page="subscriptionsPage"]').classList.add('active');
+        document.querySelectorAll('.dashboard-page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('subscriptionsPage').classList.add('active');
+        await loadSettingsDefaults();
+        await loadSubs();
+        await updateStats();
+        runSubExpiryAutoClean();
+        if(isPanelExpired){
+            showExpiredOverlay();
+        } else {
+            hideExpiredOverlay();
+            setTimeout(()=>{ syncMyCodesToAllSubs(); }, 1000);
+        }
+    }
+    if(isPanelExpired){
+        // don't show toast
+    } else {
+        showToast('Hoş geldiňiz!');
+    }
+}
+
+document.getElementById('btnLogout').addEventListener('click',doLogout);
+
+/* ============== AUTO-CLEANUP ============== */
+async function runSubExpiryAutoClean(){
+    if(!currentPanel) return;
+    try{
+        const snap=await db.ref(`paneller/${currentPanel}/subs`).once('value');
+        if(!snap.exists()) return;
+        const updates={};
+        snap.forEach(ch=>{
+            const s=ch.val();const id=ch.key;
+            if(s.status==='Pozulan'||s.status==='Doňdurylan'||s.status==='Expired') return;
+            if(!s.wagt) return;
+            const m=String(s.wagt).match(/(\d{2})\.(\d{2})\.(\d{4})/);
+            if(!m) return;
+            const expMs=new Date(parseInt(m[3]),parseInt(m[2])-1,parseInt(m[1]),23,59,59).getTime();
+            if(expMs<Date.now()){
+                const dummy="vless://00000000-0000-0000-0000-000000000000@0.0.0.0:0?encryption=none#Expired";
+                updates[`subs/${id}/kodlar`]=[{link:dummy,status:'ýapylan'}];
+                updates[`subs/${id}/status`]='Expired';
+                updates[`subs/${id}/backup_kodlar`]=s.kodlar||[];
+                updates[`subs/${id}/backup_status`]=s.status;
+            }
+        });
+        if(Object.keys(updates).length>0){
+            await db.ref(`paneller/${currentPanel}`).update(updates);
+        }
+    }catch(e){}
+}
+
+/* ============== SIDEBAR ============== */
+document.getElementById('sidebarToggle').addEventListener('click',()=>{document.getElementById('sidebar').classList.toggle('collapsed');});
+document.getElementById('mobileHamburger').addEventListener('click',()=>{document.getElementById('sidebar').classList.toggle('mobile-open');document.getElementById('sidebarOverlay').classList.toggle('active');});
+document.getElementById('sidebarOverlay').addEventListener('click',()=>{document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sidebarOverlay').classList.remove('active');});
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+        if(isPanelExpired){ showExpiredOverlay(); return; }
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.querySelectorAll('.dashboard-page').forEach(p=>p.classList.remove('active'));
+        item.classList.add('active');
+        const pid=item.dataset.page;
+        const el=document.getElementById(pid);
+        if(el) el.classList.add('active');
+        document.getElementById('sidebar').classList.remove('mobile-open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+        if(pid==='subscriptionsPage'){loadSubs();updateStats();}
+        if(pid==='vpnCodesPage') loadMyCodes();
+        if(pid==='groupsPage') loadGroups();
+        if(pid==='historyPage') loadHistory();
+        if(pid==='settingsPage') loadSettingsDefaults();
+        if(pid==='creatorHomePage') loadCreatorData();
+    });
+});
+
+/* ============== THEME ============== */
+document.getElementById('themeMenuBtn').addEventListener('click',(e)=>{e.stopPropagation();document.getElementById('themeDropdown').classList.toggle('show');});
+window.addEventListener('click',()=>{document.querySelectorAll('.dropdown-menu,.ios-dropdown').forEach(d=>d.classList.remove('show'));});
+document.querySelectorAll('#themeDropdown .dropdown-item').forEach(item=>{
+    item.addEventListener('click',(e)=>{
+        document.querySelectorAll('#themeDropdown .dropdown-item').forEach(i=>i.classList.remove('active'));
+        e.target.classList.add('active');
+        const th=e.target.dataset.theme;
+        if(th==='system'){const sd=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',sd?'dark':'light');}
+        else document.documentElement.setAttribute('data-theme',th);
+        localStorage.setItem('bulut_theme',th);
+    });
+});
+(function(){const st=localStorage.getItem('bulut_theme');if(st){document.querySelectorAll('#themeDropdown .dropdown-item').forEach(i=>{i.classList.toggle('active',i.dataset.theme===st);});if(st==='system'){const sd=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',sd?'dark':'light');}else document.documentElement.setAttribute('data-theme',st);}})();
+
+/* ============== IOS SELECT ============== */
+function setupIosSelect(btnId,ddId,textId,cb){
+    const btn=document.getElementById(btnId);
+    const dd=document.getElementById(ddId);
+    if(!btn||!dd) return;
+    btn.onclick=(e)=>{e.stopPropagation();if(isPanelExpired){showExpiredOverlay();return;}document.querySelectorAll('.ios-dropdown').forEach(d=>{if(d!==dd)d.classList.remove('show');});dd.classList.toggle('show');};
+    dd.querySelectorAll('.ios-option').forEach(opt=>{
+        opt.onclick=(e)=>{
+            e.stopPropagation();
+            const val=opt.dataset.value;
+            document.getElementById(textId).textContent=opt.textContent;
+            dd.classList.remove('show');
+            if(cb) cb(val,opt.textContent);
+        };
+    });
+}
+let selectedLimitValue=0;
+let selectedDuration='30';
+let selectedInterval='1';
+setupIosSelect('durationSelectBtn','durationDropdown','durationSelectedText',(v)=>{selectedDuration=v;document.getElementById('customDurationInput').style.display=v==='custom'?'':'none';});
+setupIosSelect('intervalSelectBtn','intervalDropdown','intervalSelectedText',(v)=>{selectedInterval=v;});
+setupIosSelect('limitSelectBtn','limitDropdown','limitSelectedText',(v)=>{selectedLimitValue=(parseFloat(v)||0)*1073741824;});
+function getLimitBytes(){ if(selectedLimitValue===0) return 0; return selectedLimitValue; }
+
+/* ============== REGISTER ============== */
+document.getElementById('btnOpenRegister').addEventListener('click',()=>{
+    document.getElementById('regPanelName').value = '';
+    document.getElementById('regPanelPass').value = '';
+    document.getElementById('registerModal').classList.add('active');
+});
+document.getElementById('btnCloseRegisterModal').addEventListener('click',()=>{document.getElementById('registerModal').classList.remove('active');});
+document.getElementById('registerModal').addEventListener('click',(e)=>{if(e.target.id==='registerModal') e.currentTarget.classList.remove('active');});
+
+document.getElementById('registerForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const btn = document.getElementById('btnRegisterSubmit');
+    if(btn.disabled) return;
+    const name = document.getElementById('regPanelName').value.trim().replace(/[.#$\[\]]/g,'');
+    const pass = document.getElementById('regPanelPass').value.trim();
+    if(!name || !pass){showToast('Ähli meýdanlary dolduryň',true);return;}
+    if(pass.length < 3){showToast('Kod gysga (min 3)',true);return;}
+    // Check block
+    const blocked = await isUserBlockedFromRegister();
+    if(blocked){
+        showToast('Siziň paneliňiz möhleti gutardy. Täze hasap döredip bolmaýar. Admina ýüz tutuň.', true);
+        return;
+    }
+    btn.disabled = true;
+    const origText = btn.textContent;
+    btn.textContent = 'Döredilýär...';
+    try{
+        // Check name available
+        const existSnap = await db.ref('paneller/'+name).once('value');
+        if(existSnap.exists()){
+            showToast('Bu at bilen panel eýýäm bar! Başga at saýlaň.', true);
+            btn.disabled = false; btn.textContent = origText;
+            return;
+        }
+        // Check creator name conflict
+        const cSnap = await db.ref('panel_yaradyjylar/'+name).once('value');
+        if(cSnap.exists()){
+            showToast('Bu at eýýäm ulanylýar. Başga at saýlaň.', true);
+            btn.disabled = false; btn.textContent = origText;
+            return;
+        }
+        // Create panel
+        const expiresAt = Date.now() + REGISTER_DEFAULT_DAYS*24*60*60*1000;
+        await db.ref('paneller/'+name).set({
+            parol: pass,
+            limit: REGISTER_UNLIMITED_LIMIT,
+            wagt: Date.now(),
+            owner: 'self',
+            expiresAt: expiresAt,
+            expired: false,
+            createdAt: Date.now()
+        });
+        // Log
+        try{
+            await db.ref(`paneller/${name}/logs`).push({
+                action:'register', user:name,
+                details:'Self-registered panel, 20 days, unlimited',
+                timestamp: new Date().toISOString()
+            });
+        }catch(e){}
+        // Success
+        btn.textContent = 'Döredildi ✓';
+        btn.classList.add('btn-success');
+        document.getElementById('registerModal').classList.remove('active');
+        showToast('Hasap döredildi! 20 gün möhletli. Indi ulgama girip bilersiňiz.');
+        // Pre-fill login
+        document.getElementById('loginUser').value = name;
+        document.getElementById('loginPass').value = pass;
+        setTimeout(()=>{
+            btn.disabled = false;
+            btn.textContent = origText;
+            btn.classList.remove('btn-success');
+        }, 900);
+    }catch(err){
+        btn.disabled = false;
+        btn.textContent = origText;
+        showToast(err.message||'Ýalňyşlyk', true);
+    }
+});
+
+/* ============== MY VPN CODES ============== */
+async function loadMyCodes(){
+    if(!currentPanel) return;
+    const wrap = document.getElementById('myCodesList');
+    wrap.innerHTML = '<div class="empty-state"><p>Ýüklenýär...</p></div>';
+    try{
+        const snap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+        const data = snap.exists() ? snap.val() : {};
+        myCodesList = Object.keys(data).map(id=>({
+            id, link: data[id].link||'', name: data[id].name||'',
+            order: typeof data[id].order==='number'?data[id].order:0,
+            createdAt: data[id].createdAt||0
+        })).filter(c=>c.link);
+        myCodesList.sort((a,b)=>{
+            if(a.order !== b.order) return a.order - b.order;
+            return (a.createdAt||0) - (b.createdAt||0);
+        });
+        myCodesList.forEach((c,i)=>{c.order = i;});
+        renderMyCodes();
+    }catch(e){
+        wrap.innerHTML = '<div class="empty-state"><p>Ýalňyşlyk: '+escHtml(e.message)+'</p></div>';
+    }
+}
+
+function renderMyCodes(){
+    const wrap = document.getElementById('myCodesList');
+    const badge = document.getElementById('myCodesCount');
+    const statsBar = document.getElementById('myCodesStatsBar');
+    badge.textContent = myCodesList.length;
+
+    const counts = {vless:0, vmess:0, trojan:0, ss:0, ssh:0, hysteria:0, hysteria2:0, other:0};
+    myCodesList.forEach(c=>{ const p = getProto(c.link)||'other'; counts[p]=(counts[p]||0)+1; });
+    let statsHtml = `<div class="stat-mini">Jemi: <b>${myCodesList.length}</b></div>`;
+    Object.keys(counts).forEach(k=>{
+        if(counts[k]>0) statsHtml += `<div class="stat-mini"><span class="code-proto-badge ${protoClass(k)}">${protoLabel(k)}</span> <b>${counts[k]}</b></div>`;
+    });
+    statsBar.innerHTML = statsHtml;
+
+    if(myCodesList.length===0){
+        wrap.innerHTML = '<div class="empty-state"><p>Entek VPN kody goşulmady. Ýokardaky formdan goşuň.</p></div>';
+        return;
+    }
+    let html = '';
+    myCodesList.forEach((c,idx)=>{
+        const proto = getProto(c.link)||'other';
+        const displayName = c.name || getNameFromLink(c.link) || `VPN Kod ${idx+1}`;
+        html += `<div class="code-manage-row" data-code-id="${escHtml(c.id)}" data-idx="${idx}">
+            <div class="code-manage-head">
+                <div class="code-manage-title">
+                    <span style="color:var(--text-secondary);">#${idx+1}</span>
+                    <span class="code-proto-badge ${protoClass(proto)}">${protoLabel(proto)}</span>
+                </div>
+                <div class="code-manage-actions">
+                    <button type="button" class="action-icon-btn" onclick="moveCodeUp(${idx})" ${idx===0?'disabled':''} title="Ýokary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+                    </button>
+                    <button type="button" class="action-icon-btn" onclick="moveCodeDown(${idx})" ${idx===myCodesList.length-1?'disabled':''} title="Aşak">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <button type="button" class="action-icon-btn" onclick="copyCodeLink(${idx})" title="Göçür">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    </button>
+                    <button type="button" class="action-icon-btn" style="border-color:rgba(239,68,68,.35);color:#ef4444;" onclick="deleteCodeByIdx(${idx})" title="Poz">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="code-manage-field">
+                <label>Ady:</label>
+                <input type="text" class="code-name-input" data-id="${escHtml(c.id)}" value="${escHtml(displayName)}" placeholder="Kod ady...">
+            </div>
+            <div class="code-manage-field">
+                <label>Kod:</label>
+                <input type="text" class="code-input" value="${escHtml(c.link)}" readonly>
+            </div>
+        </div>`;
+    });
+    wrap.innerHTML = html;
+}
+
+window.moveCodeUp = function(i){
+    if(i<=0 || isPanelExpired) return;
+    syncCodeNamesFromInputs();
+    [myCodesList[i-1],myCodesList[i]] = [myCodesList[i],myCodesList[i-1]];
+    myCodesList.forEach((c,idx)=>{c.order = idx;});
+    renderMyCodes();
+};
+window.moveCodeDown = function(i){
+    if(i>=myCodesList.length-1 || isPanelExpired) return;
+    syncCodeNamesFromInputs();
+    [myCodesList[i+1],myCodesList[i]] = [myCodesList[i],myCodesList[i+1]];
+    myCodesList.forEach((c,idx)=>{c.order = idx;});
+    renderMyCodes();
+};
+function syncCodeNamesFromInputs(){
+    document.querySelectorAll('#myCodesList .code-name-input').forEach(inp=>{
+        const id = inp.dataset.id;
+        const c = myCodesList.find(x=>x.id===id);
+        if(c) c.name = inp.value.trim();
+    });
+}
+window.copyCodeLink = function(idx){
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const c = myCodesList[idx];
+    if(!c) return;
+    copyToClipboard(c.link);
+    showToast('Kod göçürildi');
+};
+window.deleteCodeByIdx = function(idx){
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const c = myCodesList[idx];
+    if(!c) return;
+    if(!confirm(`"${c.name||'Kod'}" pozmalymy?`)) return;
+    db.ref(`paneller/${currentPanel}/my_codes/${c.id}`).remove().then(async()=>{
+        showToast('Kod pozuldy');
+        await loadMyCodes();
+        scheduleSyncCodesToSubs(200);
+    }).catch(e=>showToast('Ýalňyşlyk: '+e.message,true));
+};
+
+document.getElementById('btnAddCode').addEventListener('click', async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const raw = document.getElementById('newCodeLink').value.trim();
+    const nameInput = document.getElementById('newCodeName').value.trim();
+    if(!raw){showToast('VPN kody giriziň',true);return;}
+    showToast('Kodlar barlanýar...');
+    const codes = await extractVpnCodes(raw);
+    if(codes.length === 0){
+        showToast('Ulgama ýaramly VPN kody tapylmady!',true);
+        return;
+    }
+    const baseOrder = myCodesList.length;
+    let added = 0;
+    for(let i = 0; i < codes.length; i++){
+        const link = codes[i];
+        let name;
+        if(codes.length === 1 && nameInput){
+            name = nameInput;
+        } else {
+            name = getNameFromLink(link) || ('VPN Kod '+(baseOrder+i+1));
+        }
+        const id = 'c_'+Date.now()+'_'+Math.random().toString(36).substring(2,7);
+        const order = baseOrder + i;
+        try{
+            await db.ref(`paneller/${currentPanel}/my_codes/${id}`).set({link, name, order, createdAt: Date.now()});
+            added++;
+        }catch(e){}
+    }
+    document.getElementById('newCodeLink').value = '';
+    document.getElementById('newCodeName').value = '';
+    showToast(added+' kod goşuldy we abunalara paýlandy!');
+    await loadMyCodes();
+    await syncMyCodesToAllSubs();
+});
+
+document.getElementById('btnSaveCodeEdits').addEventListener('click', async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const btn = document.getElementById('btnSaveCodeEdits');
+    if(btn.disabled) return;
+    btn.disabled = true;
+    const orig = btn.innerHTML;
+    btn.innerHTML = 'Saklanýar...';
+    try{
+        syncCodeNamesFromInputs();
+        const updates = {};
+        myCodesList.forEach((c,idx)=>{
+            updates[`${c.id}/name`] = c.name || '';
+            updates[`${c.id}/order`] = idx;
+        });
+        await db.ref(`paneller/${currentPanel}/my_codes`).update(updates);
+        btn.innerHTML = 'Saklandy ✓';
+        btn.classList.add('btn-success');
+        await loadMyCodes();
+        await syncMyCodesToAllSubs();
+        showToast('Üýtgeşmeler saklandy!');
+        setTimeout(()=>{
+            btn.disabled = false;
+            btn.innerHTML = orig;
+            btn.classList.remove('btn-success');
+        }, 900);
+    }catch(e){
+        btn.disabled = false;
+        btn.innerHTML = orig;
+        showToast('Ýalňyşlyk: '+e.message,true);
+    }
+});
+
+document.getElementById('btnDeleteAllCodes').addEventListener('click', ()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    if(myCodesList.length===0){showToast('Kod ýok',true);return;}
+    if(!confirm(`Ähli ${myCodesList.length} kody pozmalymy?`)) return;
+    db.ref(`paneller/${currentPanel}/my_codes`).remove().then(async()=>{
+        showToast('Ähli kodlar pozuldy!');
+        logActivity('delete_all_codes','All my codes deleted');
+        await loadMyCodes();
+        await syncMyCodesToAllSubs();
+    }).catch(e=>showToast('Ýalňyşlyk: '+e.message,true));
+});
+
+/* ============== LOAD SUBS ============== */
+async function loadSubs(){
+    if(!currentPanel) return;
+    const snap=await db.ref(`paneller/${currentPanel}/subs`).once('value');
+    const out=[];
+    if(snap.exists()){
+        const promises = [];
+        snap.forEach(child=>{
+            const s=child.val();const id=child.key;
+            if(s.status==='Pozulan') return;
+            if(currentSearch){
+                const txt=((s.ady||'')+' '+(s.profileTitle||'')).toLowerCase();
+                if(!txt.includes(currentSearch.toLowerCase())) return;
+            }
+            const daysLeft=parseDaysFromWagt(s.wagt);
+            const isUnlim=(s.wagt||'').includes('2099')||!daysLeft;
+            const protos={};let cfgCount=0;
+            getSafeArray(s.kodlar).forEach(k=>{
+                if(!k||!k.link) return;
+                cfgCount++;
+                const p=getProto(k.link); if(p) protos[p]=(protos[p]||0)+1;
+            });
+            const isDisabled=s.status==='Doňdurylan'||s.status==='Expired';
+            const item = {
+                id,name:s.ady||'',profile_title:s.profileTitle||s.ady||'',
+                web_page_url:s.webPageUrl||'',support_url:s.telegramUrl||SUPPORT_URL,
+                announcement:s.opisaniye||'',days:isUnlim?99999:(daysLeft||0),days_left:isUnlim?null:daysLeft,
+                config_count:cfgCount,protos,
+                expires:(s.wagt||'').replace('expires: ',''),
+                sub_url:`${SUB_DOMAIN}/${currentPanel}/${id}`,
+                disabled:isDisabled,status:s.status,
+                limit_total:gbToBytes(s.gbLimit||0),
+                hwid_limit: parseInt(s.hwid_limit || 0) || 0,
+                usage_upload: 0, usage_download: 0,
+                _raw:s
+            };
+            out.push(item);
+            promises.push(
+                db.ref(`paneller/${currentPanel}/subs/${id}/usage`).once('value').then(us=>{
+                    const u = us.exists() ? us.val() : {};
+                    item.usage_upload = parseInt(u.upload || 0);
+                    item.usage_download = parseInt(u.download || 0);
+                }).catch(()=>{})
+            );
+        });
+        await Promise.all(promises);
+    }
+    allSubs=out;
+    renderTable();
+}
+async function updateStats(){
+    if(!currentPanel) return;
+    const snap=await db.ref(`paneller/${currentPanel}/subs`).once('value');
+    let total=0,active=0,expiring=0,configs=0;
+    if(snap.exists()){
+        snap.forEach(ch=>{
+            const s=ch.val();
+            if(s.status==='Pozulan') return;
+            total++;
+            const isDisabled=s.status==='Doňdurylan'||s.status==='Expired';
+            if(!isDisabled) active++;
+            const dLeft=parseDaysFromWagt(s.wagt);
+            if(!isDisabled&&dLeft!==null&&dLeft>0&&dLeft<=3) expiring++;
+            configs+=getSafeArray(s.kodlar).length;
+        });
+    }
+    document.getElementById('statValueTotal').textContent=total;
+    document.getElementById('statValueActive').textContent=active;
+    document.getElementById('statValueExpiring').textContent=expiring;
+    document.getElementById('statValueConfigs').textContent=configs;
+}
+function protoBadges(protos){
+    if(!protos) return '';
+    const map={vless:'badge-vless',vmess:'badge-vmess',trojan:'badge-trojan'};
+    const labels={vless:'VLESS',vmess:'VMess',trojan:'Trojan'};
+    return Object.entries(protos).filter(([,c])=>c>0).map(([k,c])=>'<span class="'+(map[k]||'')+'">'+c+' '+labels[k]+'</span>').join('');
+}
+function renderTable(){
+    const tbody=document.getElementById('subsTableBody');
+    const empty=document.getElementById('subsEmptyState');
+    const tc=document.querySelector('#subscriptionsPage .table-container');
+    if(allSubs.length===0){
+        tbody.innerHTML='';tc.style.display='none';empty.style.display='block';
+        document.getElementById('paginationInfo').textContent='Zat ýok';
+        document.getElementById('paginationBtns').innerHTML='';
+        return;
+    }
+    empty.style.display='none';tc.style.display='';
+    tbody.innerHTML=allSubs.map((s,i)=>{
+        const dLeft=s.days_left;
+        const isUnlim=dLeft===null;
+        const isExpired=!isUnlim&&dLeft<=0;
+        const isDisabled=s.disabled;
+        const dotClass=(isExpired||isDisabled)?'dot-yellow':'dot-green';
+        const daysText=isUnlim?'∞d':(isExpired?'0d':dLeft+'d');
+        const daysColor=(isExpired||isDisabled)?'#f59e0b':'#10b981';
+        const statusLabel=isUnlim?'Çäksiz':s.expires;
+        const used = (s.usage_upload || 0) + (s.usage_download || 0);
+        const limitBytes = s.limit_total || 0;
+        let usageHtml = '<span style="color:var(--text-secondary);font-size:11px;">—</span>';
+        if(limitBytes > 0){
+            const pct = Math.min(100, Math.round((used / limitBytes) * 100));
+            let barColor = '#10b981';
+            if(pct >= 90) barColor = '#ef4444';
+            else if(pct >= 60) barColor = '#f59e0b';
+            usageHtml = `<div style="display:flex;flex-direction:column;gap:4px;min-width:100px;">
+                <div style="font-size:11px;color:var(--text-main);font-weight:600;">${formatBytes(used)} / ${formatBytes(limitBytes)}</div>
+                <div style="width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;">
+                    <div style="width:${pct}%;height:100%;background:${barColor};border-radius:10px;"></div>
+                </div>
+            </div>`;
+        } else if(used > 0){
+            usageHtml = `<span style="font-size:11px;color:var(--text-main);font-weight:600;">${formatBytes(used)}</span>`;
+        }
+        return '<tr class="data-row" data-id="'+s.id+'">'+
+            '<td style="color:var(--text-secondary);">'+String(i+1).padStart(2,'0')+'</td>'+
+            '<td><div class="name-card-wrapper"><div class="name-badge-box">'+escHtml(s.name)+'</div></div></td>'+
+            '<td><div class="status-badge"><span class="'+dotClass+'"></span><span style="color:'+daysColor+';font-weight:600;">'+daysText+'</span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">'+escHtml(statusLabel)+'</div></td>'+
+            '<td><div class="configs-info"><span class="configs-total">'+s.config_count+' Configs</span><div class="configs-badges">'+protoBadges(s.protos)+'</div></div></td>'+
+            '<td><label class="toggle-switch"><input type="checkbox" class="sub-toggle" data-id="'+s.id+'" '+(isDisabled?'':'checked')+'><span class="slider"></span></label></td>'+
+            '<td>'+usageHtml+'</td>'+
+            '<td>'+(s.limit_total>0?formatBytes(s.limit_total):'<span style="color:var(--text-secondary);font-size:11px;">-</span>')+'</td>'+
+            '<td><div class="actions-cell">'+
+                '<button class="action-icon-btn btn-copy" data-id="'+s.id+'" title="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>'+
+                '<button class="action-icon-btn btn-qr" data-id="'+s.id+'" title="QR"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>'+
+                '<button class="action-icon-btn btn-edit" data-id="'+s.id+'" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'+
+                '<button class="action-icon-btn btn-view" data-id="'+s.id+'" title="View"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>'+
+                '<button class="action-icon-btn btn-delete" data-id="'+s.id+'" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>'+
+            '</div></td></tr>';
+    }).join('');
+    updatePagination();
+}
+function updatePagination(){
+    const rows=document.querySelectorAll('#subsTableBody tr.data-row');
+    const total=rows.length;
+    const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+    if(currentPage>totalPages) currentPage=totalPages;
+    const start=(currentPage-1)*PAGE_SIZE;
+    const end=Math.min(start+PAGE_SIZE,total);
+    rows.forEach((row,i)=>{row.style.display=(i>=start&&i<end)?'':'none';});
+    document.getElementById('paginationInfo').textContent=total>0?('Görkezilýär '+(start+1)+'-'+end+' / '+total):'Zat ýok';
+    const btns=document.getElementById('paginationBtns');btns.innerHTML='';
+    if(totalPages<=1) return;
+    const prev=document.createElement('button');prev.className='pagination-btn';prev.innerHTML='‹';prev.disabled=currentPage===1;prev.onclick=()=>{currentPage--;updatePagination();};btns.appendChild(prev);
+    for(let i=1;i<=totalPages;i++){const b=document.createElement('button');b.className='pagination-btn'+(i===currentPage?' active':'');b.textContent=i;b.onclick=()=>{currentPage=i;updatePagination();};btns.appendChild(b);}
+    const next=document.createElement('button');next.className='pagination-btn';next.innerHTML='›';next.disabled=currentPage===totalPages;next.onclick=()=>{currentPage++;updatePagination();};btns.appendChild(next);
+}
+
+/* ============== TABLE ACTIONS ============== */
+document.getElementById('subsTableBody').addEventListener('click',async(e)=>{
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const btn=e.target.closest('.action-icon-btn,.sub-toggle');
+    if(!btn) return;
+    const id=btn.dataset.id;
+    const s=allSubs.find(x=>x.id===id);
+    if(!s) return;
+    if(btn.classList.contains('btn-copy')){copyToClipboard(s.sub_url);showToast('Baglanyşyk göçürildi');}
+    else if(btn.classList.contains('btn-qr')){document.getElementById('qrSubNameText').textContent=s.name;document.getElementById('qrImage').src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+encodeURIComponent(s.sub_url);document.getElementById('qrModal').classList.add('active');}
+    else if(btn.classList.contains('btn-edit')){
+        editingSubId=id;
+        document.getElementById('editSubName').value=s.name;
+        document.getElementById('editProfileTitle').value=s.profile_title||'';
+        document.getElementById('editWebPageUrl').value=s.web_page_url||'';
+        document.getElementById('editSupportUrl').value=s.support_url||'';
+        document.getElementById('editAnnouncement').value=s.announcement||'';
+        document.getElementById('editSubNote').value=s.note||'';
+        document.getElementById('editLimitGb').value=s.limit_total>0?(s.limit_total/1073741824).toFixed(2):'';
+        document.getElementById('editHwidLimit').value = s.hwid_limit || 0;
+        await loadUsageAndHwids(id, s.limit_total || 0, s.hwid_limit || 0);
+        await loadEditCodesNames(s._raw && s._raw.kodlar ? s._raw.kodlar : []);
+        document.getElementById('editSubModal').classList.add('active');
+    }
+    else if(btn.classList.contains('btn-view')){
+        document.getElementById('viewName').textContent=s.name;
+        document.getElementById('viewProfileTitle').textContent=s.profile_title||'-';
+        document.getElementById('viewSubUrl').value=s.sub_url||'';
+        document.getElementById('viewLimit').textContent=s.limit_total>0?formatBytes(s.limit_total):'Çäksiz';
+        document.getElementById('viewHwidLimit').textContent = s.hwid_limit > 0 ? s.hwid_limit : '∞';
+        const arr = getSafeArray(s._raw && s._raw.kodlar ? s._raw.kodlar : []);
+        let namesHtml = '';
+        arr.forEach((k) => {
+            if(!k || !k.link) return;
+            const nm = getNameFromLink(k.link) || 'VPN Kod';
+            namesHtml += '<div>'+escHtml(nm)+'</div>';
+        });
+        document.getElementById('viewCodesNamesList').innerHTML = namesHtml || '-';
+        document.getElementById('viewSubModal').classList.add('active');
+    }
+    else if(btn.classList.contains('btn-delete')){
+        deleteTargetId=id;deleteTargetType='sub';
+        document.getElementById('confirmDeleteTitle').textContent='Abuny pozmalymy?';
+        document.getElementById('confirmDeleteText').textContent='Bu abuna hemişelik pozular.';
+        document.getElementById('confirmDeleteModal').classList.add('active');
+    }
+});
+document.getElementById('subsTableBody').addEventListener('change',async(e)=>{
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    if(e.target.classList.contains('sub-toggle')){const id=e.target.dataset.id;await toggleSubStatus(id);await loadSubs();await updateStats();}
+});
+
+async function loadUsageAndHwids(subId, limitBytes, hwidLimit){
+    try {
+        const usageSnap = await db.ref(`paneller/${currentPanel}/subs/${subId}/usage`).once('value');
+        const u = usageSnap.exists() ? usageSnap.val() : {};
+        const up = parseInt(u.upload || 0);
+        const down = parseInt(u.download || 0);
+        const total = up + down;
+        document.getElementById('usageUploadVal').textContent = formatBytes(up);
+        document.getElementById('usageDownloadVal').textContent = formatBytes(down);
+        document.getElementById('usageTotalVal').textContent = formatBytes(total);
+        document.getElementById('usageLimitVal').textContent = limitBytes > 0 ? formatBytes(limitBytes) : '∞';
+        const remaining = limitBytes > 0 ? Math.max(0, limitBytes - total) : 0;
+        document.getElementById('usageRemainingVal').textContent = limitBytes > 0 ? formatBytes(remaining) : '∞';
+        let pct = 0;
+        if(limitBytes > 0) pct = Math.min(100, Math.round((total / limitBytes) * 100));
+        document.getElementById('usagePercentVal').textContent = pct + '%';
+        const fill = document.getElementById('usageProgressFill');
+        fill.style.width = pct + '%';
+        fill.classList.remove('low','mid','high');
+        if(pct < 60) fill.classList.add('low');
+        else if(pct < 90) fill.classList.add('mid');
+        else fill.classList.add('high');
+    } catch(e){}
+    await renderHwidsList(subId, hwidLimit);
+}
+
+async function renderHwidsList(subId, hwidLimit){
+    const wrap = document.getElementById('editHwidsListInner');
+    const counter = document.getElementById('hwidCountVal');
+    try {
+        const snap = await db.ref(`paneller/${currentPanel}/subs/${subId}/hwids`).once('value');
+        const hwids = snap.exists() ? snap.val() : {};
+        const entries = Object.entries(hwids);
+        counter.textContent = entries.length + ' / ' + (hwidLimit > 0 ? hwidLimit : '∞');
+        counter.classList.toggle('full', hwidLimit > 0 && entries.length >= hwidLimit);
+        if(entries.length === 0){
+            wrap.innerHTML = '<div class="hwid-empty">Entek enjam çatylmady</div>';
+            return;
+        }
+        let html = '';
+        entries.forEach(([key, val], idx) => {
+            const display = String(val).length > 40 ? String(val).substring(0, 20) + '…' + String(val).slice(-12) : String(val);
+            html += `<div class="hwid-item">
+                <div class="hwid-index">${idx+1}</div>
+                <div class="hwid-id" title="${escHtml(String(val))}">${escHtml(display)}</div>
+                <button type="button" class="hwid-remove" data-remove-key="${escHtml(key)}">×</button>
+            </div>`;
+        });
+        wrap.innerHTML = html;
+        wrap.querySelectorAll('.hwid-remove').forEach(btn => {
+            btn.onclick = async () => {
+                if(!confirm('Bu enjamy aýyrmalymy?')) return;
+                const key = btn.dataset.removeKey;
+                await db.ref(`paneller/${currentPanel}/subs/${subId}/hwids/${key}`).remove();
+                showToast('Enjam aýryldy');
+                const hl = parseInt(document.getElementById('editHwidLimit').value || 0);
+                await renderHwidsList(subId, hl);
+            };
+        });
+    } catch(e){
+        wrap.innerHTML = '<div class="hwid-empty">Entek enjam çatylmady</div>';
+    }
+}
+
+async function toggleSubStatus(id){
+    const ref=db.ref(`paneller/${currentPanel}/subs/${id}`);
+    const snap=await ref.once('value'); if(!snap.exists()) return;
+    const s=snap.val();
+    const wasDisabled=s.status==='Doňdurylan'||s.status==='Expired';
+    if(!wasDisabled){
+        const backupKodlar = getSafeArray(s.kodlar);
+        const tsSec=daysToTimestamp(0);
+        const dummy="vless://00000000-0000-0000-0000-000000000000@0.0.0.0:0?encryption=none#%F0%9F%9A%AB%20Disabled";
+        const headerText=`#profile-title: 🚫 Disabled\n#subscription-userinfo: upload=0; download=0; total=0; expire=${tsSec}\n`;
+        await ref.update({
+            status:'Doňdurylan',
+            kodlar:[{link:dummy,status:'ýapylan'}],
+            backup_kodlar:backupKodlar,
+            backup_status: s.status,
+            backup_profileTitle: s.profileTitle || s.ady,
+            kellelik_kody:headerText, header:headerText, profileTitle:'🚫 Disabled'
+        });
+        showToast('Öçürildi');
+    } else {
+        let kodlar=s.backup_kodlar;
+        if(!kodlar||!kodlar.length){
+            const codesSnap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+            const myData = codesSnap.exists()?codesSnap.val():{};
+            const myCodes = Object.keys(myData).map(id=>({
+                id, link:myData[id].link||'', name:myData[id].name||'', order:myData[id].order||0
+            })).filter(c=>c.link).sort((a,b)=>a.order-b.order);
+            kodlar=[];
+            myCodes.forEach(c=>{
+                const nm = c.name || getNameFromLink(c.link) || 'VPN Kod';
+                kodlar.push({link:getBaseFromLink(c.link)+'#'+encodeURIComponent(nm),status:'işleýär'});
+            });
+        }
+        const dLeft=parseDaysFromWagt(s.wagt);
+        const tsSec=daysToTimestamp(dLeft!==null?dLeft:30);
+        const totalBytes=gbToBytes(s.gbLimit||0);
+        const restoredProfileTitle = s.backup_profileTitle || s.ady;
+        const headerText=`#profile-title: ${restoredProfileTitle}\n#subscription-userinfo: upload=0; download=0; total=${totalBytes}; expire=${tsSec}\n`;
+        await ref.update({
+            status:'Aktiw', kodlar:kodlar, profileTitle: restoredProfileTitle,
+            kellelik_kody:headerText, header:headerText,
+            backup_kodlar:null, backup_status:null, backup_profileTitle:null
+        });
+        showToast('Açyldy');
+    }
+}
+
+/* ============== EDIT CODE NAMES ============== */
+async function loadEditCodesNames(kodlarArray){
+    const wrap = document.getElementById('editCodesNamesWrap');
+    const codesSnap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+    const myData = codesSnap.exists()?codesSnap.val():{};
+    const myCodes = Object.keys(myData).map(id=>({
+        id, link: myData[id].link||'', name: myData[id].name||'',
+        order: typeof myData[id].order==='number'?myData[id].order:0
+    })).filter(c=>c.link).sort((a,b)=>a.order-b.order);
+
+    const arr = getSafeArray(kodlarArray);
+    const subNameMap = {};
+    arr.forEach(k => {
+        if(!k || !k.link) return;
+        const base = getBaseFromLink(k.link);
+        subNameMap[base] = getNameFromLink(k.link);
+    });
+
+    const list = [];
+    myCodes.forEach(c=>{
+        const base = getBaseFromLink(c.link);
+        const subName = subNameMap[base];
+        const displayName = subName || c.name || getNameFromLink(c.link) || 'VPN Kod';
+        list.push({base, name: displayName});
+    });
+
+    const myBases = new Set(myCodes.map(c=>getBaseFromLink(c.link)));
+    arr.forEach(k=>{
+        if(!k || !k.link) return;
+        const base = getBaseFromLink(k.link);
+        if(myBases.has(base)) return;
+        const nm = getNameFromLink(k.link) || 'VPN Kod';
+        list.push({base, name: nm});
+    });
+
+    if(list.length===0){
+        wrap.innerHTML = '<p style="color:var(--text-secondary);font-size:12px;text-align:center;padding:10px;">—</p>';
+        return;
+    }
+    let html = '';
+    list.forEach((item,i)=>{
+        html += `<div style="display:flex;gap:8px;padding:8px 10px;background:var(--card-bg);border:1px solid var(--border-color);border-radius:8px;margin-bottom:6px;align-items:center;">
+            <span style="font-size:11px;color:var(--text-secondary);min-width:22px;">#${i+1}</span>
+            <input type="text" class="edit-code-name-input" data-base="${escHtml(item.base)}" value="${escHtml(item.name)}" style="flex:1;min-width:0;padding:6px 10px;background:transparent;border:none;color:var(--text-main);font-size:12px;outline:0;">
+        </div>`;
+    });
+    wrap.innerHTML = html;
+}
+
+/* ============== NEW SUB MODAL ============== */
+document.getElementById('btnOpenNewSub').addEventListener('click',async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    selectedLimitValue=0;
+    document.getElementById('limitSelectedText').textContent='Çäksiz';
+    document.getElementById('hwidLimit').value = '';
+    await loadNewSubCodesPreview();
+    document.getElementById('newSubModal').classList.add('active');
+});
+
+async function loadNewSubCodesPreview(){
+    const wrap = document.getElementById('newSubCodesPreview');
+    const snap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+    const data = snap.exists()?snap.val():{};
+    const codes = Object.keys(data).map(id=>({
+        id, link:data[id].link||'', name:data[id].name||'', order:data[id].order||0
+    })).filter(c=>c.link).sort((a,b)=>a.order-b.order);
+    if(codes.length===0){
+        wrap.innerHTML = '<p style="color:var(--text-secondary);font-size:12px;text-align:center;padding:10px;">Entek VPN kody goşulmady. "VPN Kodlarym" bölüminden goşuň.</p>';
+        return;
+    }
+    let html = '';
+    codes.forEach((c,i)=>{
+        const proto = getProto(c.link)||'other';
+        const nm = c.name || getNameFromLink(c.link) || `VPN Kod ${i+1}`;
+        html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,.02);border-radius:6px;margin-bottom:4px;">
+            <span style="color:var(--text-secondary);font-size:11px;min-width:20px;">#${i+1}</span>
+            <span class="code-proto-badge ${protoClass(proto)}">${protoLabel(proto)}</span>
+            <span style="font-size:12px;flex:1;color:var(--text-main);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(nm)}</span>
+        </div>`;
+    });
+    wrap.innerHTML = html;
+}
+
+document.getElementById('btnCloseModal').addEventListener('click',()=>{document.getElementById('newSubModal').classList.remove('active');});
+document.getElementById('btnCloseEditModal').addEventListener('click',()=>{document.getElementById('editSubModal').classList.remove('active');});
+document.getElementById('btnCloseViewModal').addEventListener('click',()=>{document.getElementById('viewSubModal').classList.remove('active');});
+document.getElementById('btnCloseQrModal').addEventListener('click',()=>{document.getElementById('qrModal').classList.remove('active');});
+document.getElementById('btnCloseQrBtn').addEventListener('click',()=>{document.getElementById('qrModal').classList.remove('active');});
+
+/* ============== CREATE SUB ============== */
+document.getElementById('newSubForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const saveBtn=document.getElementById('btnSaveSub');
+    if(saveBtn.disabled) return;
+    saveBtn.disabled=true;
+    const origText = saveBtn.textContent;
+    saveBtn.textContent='Saklanýar...';
+    try {
+        const days=selectedDuration==='custom'?(parseInt(document.getElementById('customDurationInput').value)||30):(parseInt(selectedDuration)||30);
+        const interval=parseInt(selectedInterval)||1;
+        const name=document.getElementById('subName').value;
+        if(!name){showToast('Abuna adyny giriziň',true);saveBtn.disabled=false;saveBtn.textContent=origText;return;}
+        const hwidLimit = parseInt(document.getElementById('hwidLimit').value || 0) || 0;
+        const myCodesSnap = await db.ref(`paneller/${currentPanel}/my_codes`).once('value');
+        const myData = myCodesSnap.exists()?myCodesSnap.val():{};
+        const myCodes = Object.keys(myData).map(id=>({
+            id, link:myData[id].link||'', name:myData[id].name||'', order:myData[id].order||0,
+            createdAt: myData[id].createdAt||0
+        })).filter(c=>c.link);
+        myCodes.sort((a,b)=>{ if(a.order!==b.order) return a.order-b.order; return (a.createdAt||0)-(b.createdAt||0); });
+        const kodlar=[];
+        myCodes.forEach(c=>{
+            const nm = c.name || getNameFromLink(c.link) || 'VPN Kod';
+            kodlar.push({link:getBaseFromLink(c.link)+'#'+encodeURIComponent(nm),status:'işleýär'});
+        });
+        const wagtStr=daysToExpiresString(days);
+        const tsSec=daysToTimestamp(days);
+        const totalBytes=getLimitBytes();
+        const sName=document.getElementById('profileTitle').value||name;
+        const headerText=`#profile-title: ${sName}\n#profile-update-interval: ${interval}\n#subscription-userinfo: upload=0; download=0; total=${totalBytes}; expire=${tsSec}\n#announce: ${document.getElementById('announcement').value||''}\n#support-url: ${document.getElementById('supportUrl').value||SUPPORT_URL}\n#telegram: ${document.getElementById('supportUrl').value||SUPPORT_URL}\n`;
+        const subId='sub_'+Date.now();
+        const data={
+            ady:name,profileTitle:sName,opisaniye:document.getElementById('announcement').value||'',
+            wagt:wagtStr,status:'Aktiw',
+            kellelik_kody:headerText,header:headerText,kodlar,
+            gbLimit:(totalBytes/1073741824)||0,telegramUrl:document.getElementById('supportUrl').value||SUPPORT_URL,
+            webPageUrl:document.getElementById('webPageUrl').value||'',note:document.getElementById('subNote').value||'',
+            updateInterval:interval,createdAt:new Date().toISOString(),
+            hwid_limit: hwidLimit
+        };
+        await db.ref(`paneller/${currentPanel}/subs/${subId}`).set(data);
+        logActivity('create_sub','Created sub: '+name);
+        saveBtn.textContent='Saklandy ✓';
+        saveBtn.classList.add('btn-success');
+        setTimeout(()=>{
+            saveBtn.disabled=false;
+            saveBtn.textContent=origText;
+            saveBtn.classList.remove('btn-success');
+            document.getElementById('newSubModal').classList.remove('active');
+            document.getElementById('newSubForm').reset();
+            showToast('Abuna döredildi! ('+kodlar.length+' kod)');
+            currentPage=1;
+            loadSubs();updateStats();
+        }, 800);
+    } catch(err){
+        saveBtn.disabled=false;
+        saveBtn.textContent=origText;
+        showToast(err.message||'Error',true);
+    }
+});
+
+/* ============== UPDATE SUB ============== */
+document.getElementById('editSubForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    if(!editingSubId) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const saveBtn = document.getElementById('btnUpdateSub');
+    if(saveBtn.disabled) return;
+    saveBtn.disabled = true;
+    const origText = saveBtn.textContent;
+    saveBtn.textContent = 'Saklanýar...';
+    try {
+        const ref=db.ref(`paneller/${currentPanel}/subs/${editingSubId}`);
+        const snap=await ref.once('value'); if(!snap.exists()) throw new Error('Sub not found');
+        const s=snap.val();
+        const totalBytes=parseFloat(document.getElementById('editLimitGb').value||0)*1073741824;
+        const hwidLimit = parseInt(document.getElementById('editHwidLimit').value || 0) || 0;
+        const wagtStr=daysToExpiresString(parseDaysFromWagt(s.wagt) || 30);
+        const tsSec=daysToTimestamp(parseDaysFromWagt(s.wagt) || 30);
+        const sName=document.getElementById('editProfileTitle').value||document.getElementById('editSubName').value;
+        const nameMap = {};
+        document.querySelectorAll('#editCodesNamesWrap .edit-code-name-input').forEach(inp => {
+            nameMap[inp.dataset.base] = inp.value.trim() || 'VPN Kod';
+        });
+        const newKodlar = [];
+        Object.keys(nameMap).forEach(base => {
+            const nm = nameMap[base];
+            newKodlar.push({link: base + '#' + encodeURIComponent(nm), status: 'işleýär'});
+        });
+        const headerText=`#profile-title: ${sName}\n#subscription-userinfo: upload=0; download=0; total=${totalBytes}; expire=${tsSec}\n#announce: ${document.getElementById('editAnnouncement').value||''}\n#support-url: ${document.getElementById('editSupportUrl').value||SUPPORT_URL}\n`;
+        await ref.update({
+            ady:document.getElementById('editSubName').value,profileTitle:sName,opisaniye:document.getElementById('editAnnouncement').value||'',
+            kellelik_kody:headerText,header:headerText,kodlar:newKodlar,
+            gbLimit:(totalBytes/1073741824)||0,telegramUrl:document.getElementById('editSupportUrl').value||SUPPORT_URL,
+            webPageUrl:document.getElementById('editWebPageUrl').value||'',note:document.getElementById('editSubNote').value||'',
+            hwid_limit: hwidLimit
+        });
+        saveBtn.textContent='Saklandy ✓';
+        saveBtn.classList.add('btn-success');
+        setTimeout(()=>{
+            saveBtn.disabled = false;
+            saveBtn.textContent = origText;
+            saveBtn.classList.remove('btn-success');
+            document.getElementById('editSubModal').classList.remove('active');
+            showToast('Abuna täzelendi!');
+            loadSubs();updateStats();
+        }, 800);
+    } catch(err){
+        saveBtn.disabled = false;
+        saveBtn.textContent = origText;
+        showToast(err.message||'Error', true);
+    }
+});
+
+/* ============== DELETE ============== */
+document.getElementById('btnConfirmDelete').addEventListener('click',async()=>{
+    document.getElementById('confirmDeleteModal').classList.remove('active');
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    if(deleteTargetType==='sub'){
+        const ref=db.ref(`paneller/${currentPanel}/subs/${deleteTargetId}`);
+        await ref.child('kodlar').remove().catch(()=>{});
+        await ref.child('usage').remove().catch(()=>{});
+        await ref.child('hwids').remove().catch(()=>{});
+        await ref.remove();
+        showToast('Abuna pozuldy');
+        await loadSubs();
+        await updateStats();
+    } else if(deleteTargetType==='group'){
+        await db.ref(`paneller/${currentPanel}/groups/${deleteTargetId}`).remove();
+        showToast('Topar pozuldy');loadGroups();
+    }
+});
+document.getElementById('btnCancelDelete').addEventListener('click',()=>{document.getElementById('confirmDeleteModal').classList.remove('active');});
+document.getElementById('btnCopyViewUrl').addEventListener('click',()=>{copyToClipboard(document.getElementById('viewSubUrl').value);showToast('Baglanyşyk göçürildi');});
+
+/* ============== SEARCH ============== */
+let searchTimeout;
+document.getElementById('searchInput').addEventListener('input',(e)=>{clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>{currentSearch=e.target.value;currentPage=1;loadSubs();},300);});
+
+/* ============== LOAD SETTINGS ============== */
+async function loadSettingsDefaults(){
+    if(!currentPanel) return;
+    const snap=await db.ref(`paneller/${currentPanel}/settings`).once('value');
+    const d=snap.exists()?snap.val():{};
+    if(d.profile_title) document.getElementById('profileTitle').value=d.profile_title;
+    if(d.support_url) document.getElementById('supportUrl').value=d.support_url;
+    if(d.web_page_url) document.getElementById('webPageUrl').value=d.web_page_url;
+    if(d.announcement) document.getElementById('announcement').value=d.announcement;
+    if(d.default_note) document.getElementById('subNote').value=d.default_note;
+    document.getElementById('settingsProfileTitle').value=d.profile_title||'';
+    document.getElementById('settingsSupportUrl').value=d.support_url||'';
+    document.getElementById('settingsWebPageUrl').value=d.web_page_url||'';
+    document.getElementById('settingsAnnouncement').value=d.announcement||'';
+    document.getElementById('settingsNote').value=d.default_note||'';
+}
+
+/* ============== GROUPS ============== */
+let allGroups = [];
+async function loadGroups(){
+    if(!currentPanel) return;
+    const snap=await db.ref(`paneller/${currentPanel}/groups`).once('value');
+    allGroups=[];
+    if(snap.exists()){
+        snap.forEach(ch=>{
+            const g=ch.val();
+            const cnt=(g.configs||'').split('\n').filter(l=>l.trim()).length;
+            allGroups.push({id:ch.key,name:g.name||'',configs:g.configs||'',config_count:cnt});
+        });
+    }
+    renderGroups();
+}
+function renderGroups(){
+    const grid=document.getElementById('groupsGrid');
+    const empty=document.getElementById('groupsEmptyState');
+    grid.innerHTML='';
+    if(allGroups.length===0){empty.style.display='block';grid.style.display='none';}
+    else{
+        empty.style.display='none';grid.style.display='grid';
+        allGroups.forEach(g=>{
+            grid.innerHTML+='<div class="group-card"><div class="group-card-top"><div class="group-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div><div class="group-card-name">'+escHtml(g.name)+'</div><div class="group-card-meta">'+g.config_count+' konfig</div></div></div><div class="group-card-actions"><button class="btn-primary" style="flex:1;padding:8px;font-size:11px;" data-gdetail="'+g.id+'">Maglumatlar</button><button class="action-icon-btn btn-delete" data-gdel="'+g.id+'" style="margin-left:auto;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button></div></div>';
+        });
+        grid.querySelectorAll('[data-gdetail]').forEach(b=>b.onclick=()=>{ if(isPanelExpired){showExpiredOverlay();return;} openGroupDetail(b.dataset.gdetail);});
+        grid.querySelectorAll('[data-gdel]').forEach(b=>b.onclick=()=>{
+            if(isPanelExpired){showExpiredOverlay();return;}
+            deleteTargetId=b.dataset.gdel;deleteTargetType='group';
+            document.getElementById('confirmDeleteTitle').textContent='Topary pozmalymy?';
+            document.getElementById('confirmDeleteText').textContent='Bu topar pozular.';
+            document.getElementById('confirmDeleteModal').classList.add('active');
+        });
+    }
+}
+document.getElementById('btnOpenNewGroup').addEventListener('click',()=>{if(isPanelExpired){showExpiredOverlay();return;}document.getElementById('newGroupModal').classList.add('active');});
+document.getElementById('btnCloseNewGroupModal').addEventListener('click',()=>{document.getElementById('newGroupModal').classList.remove('active');});
+document.getElementById('newGroupForm').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const cfg=document.getElementById('groupConfigsInput').value;
+    if(!cfg.trim()){showToast('Konfigler gerek',true);return;}
+    const id='grp_'+Date.now();
+    await db.ref(`paneller/${currentPanel}/groups/${id}`).set({name:document.getElementById('groupNameInput').value,configs:cfg});
+    document.getElementById('newGroupModal').classList.remove('active');
+    document.getElementById('newGroupForm').reset();
+    showToast('Topar döredildi!');await loadGroups();
+});
+let activeGroupDetailId = null;
+async function openGroupDetail(id){
+    activeGroupDetailId=id;
+    const g=allGroups.find(x=>x.id===id); if(!g) return;
+    document.getElementById('groupDetailTitle').textContent=g.name;
+    document.getElementById('groupDetailConfigsText').value=g.configs||'';
+    document.getElementById('groupDetailModal').classList.add('active');
+}
+document.getElementById('btnCloseGroupDetailModal').addEventListener('click',()=>{document.getElementById('groupDetailModal').classList.remove('active');});
+document.getElementById('btnAddToGroup').addEventListener('click',async()=>{
+    if(!activeGroupDetailId) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const ref=db.ref(`paneller/${currentPanel}/groups/${activeGroupDetailId}`);
+    const snap=await ref.once('value'); if(!snap.exists()) return;
+    const g=snap.val();
+    const addText=document.getElementById('detailGroupConfigsInput').value.trim();
+    if(!addText){showToast('Konfigleri giriziň',true);return;}
+    const newText=(g.configs||'')+((g.configs&&addText)?'\n':'')+addText;
+    await ref.update({configs:newText});
+    document.getElementById('detailGroupConfigsInput').value='';
+    showToast('Goşuldy');await loadGroups();openGroupDetail(activeGroupDetailId);
+});
+document.getElementById('btnDeleteGroup').addEventListener('click',()=>{
+    if(!activeGroupDetailId) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    deleteTargetId=activeGroupDetailId;deleteTargetType='group';
+    document.getElementById('confirmDeleteTitle').textContent='Topary pozmalymy?';
+    document.getElementById('confirmDeleteText').textContent='Bu topar pozular.';
+    document.getElementById('confirmDeleteModal').classList.add('active');
+    document.getElementById('groupDetailModal').classList.remove('active');
+});
+
+/* ============== SETTINGS ============== */
+document.getElementById('btnSaveSettings').addEventListener('click',async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const btn = document.getElementById('btnSaveSettings');
+    if(btn.disabled) return;
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = 'Saklanýar...';
+    try {
+        const data={
+            profile_title:document.getElementById('settingsProfileTitle').value,
+            support_url:document.getElementById('settingsSupportUrl').value,
+            web_page_url:document.getElementById('settingsWebPageUrl').value,
+            announcement:document.getElementById('settingsAnnouncement').value,
+            default_note:document.getElementById('settingsNote').value
+        };
+        await db.ref(`paneller/${currentPanel}/settings`).update(data);
+        logActivity('save_settings','Settings updated');
+        btn.textContent = 'Saklandy ✓';
+        btn.classList.add('btn-success');
+        setTimeout(()=>{
+            btn.disabled = false;
+            btn.textContent = orig;
+            btn.classList.remove('btn-success');
+            showToast('Sazlamalar saklandy');
+        }, 800);
+    } catch(err){
+        btn.disabled = false;
+        btn.textContent = orig;
+        showToast(err.message||'Error', true);
+    }
+});
+document.getElementById('btnChangePassword').addEventListener('click',async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    const p=document.getElementById('settingsNewPassword').value;
+    if(p.length<5){showToast('Parol gysga (min 5)',true);return;}
+    await db.ref(`paneller/${currentPanel}/parol`).set(p);
+    logActivity('change_password','Password changed');
+    document.getElementById('settingsNewPassword').value='';
+    showToast('Parol täzelendi');
+});
+
+/* ============== HISTORY ============== */
+async function loadHistory(){
+    if(!currentPanel) return;
+    const snap=await db.ref(`paneller/${currentPanel}/logs`).once('value');
+    const list=document.getElementById('historyList');
+    const arr=[];
+    if(snap.exists()){
+        snap.forEach(ch=>{arr.push({...ch.val(),id:ch.key});});
+        arr.sort((a,b)=>(b.timestamp||'').localeCompare(a.timestamp||''));
+    }
+    if(arr.length===0){list.innerHTML='<p style="text-align:center;color:var(--text-secondary);padding:20px;">Entek işjeňlik ýazylmady.</p>';return;}
+    const iconMap={create_sub:'icon-create',update_sub:'icon-edit',delete_sub:'icon-delete',create_group:'icon-create',delete_group:'icon-delete',login:'icon-toggle',toggle_sub:'icon-toggle',delete_all_codes:'icon-delete',register:'icon-create'};
+    list.innerHTML=arr.slice(0,100).map(item=>{
+        const cls=iconMap[item.action]||'icon-create';
+        return '<div class="timeline-item"><div class="timeline-icon '+cls+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="timeline-body"><div class="timeline-title">'+escHtml(item.action)+' - '+escHtml(item.user||'')+'</div><div class="timeline-desc">'+escHtml(item.details||'')+'</div></div><div class="timeline-time">'+(item.timestamp?new Date(item.timestamp).toLocaleString():'')+'</div></div>';
+    }).join('');
+}
+document.getElementById('btnClearHistory').addEventListener('click',async()=>{
+    if(!currentPanel) return;
+    if(isPanelExpired){ showExpiredOverlay(); return; }
+    if(!confirm('Žurnaly arassalamalymy?')) return;
+    await db.ref(`paneller/${currentPanel}/logs`).remove();
+    loadHistory();showToast('Žurnal arassalandy');
+});
+
+/* ============== CREATOR HOME ============== */
+async function loadCreatorData(){
+    if(!isCreator) return;
+    const snap=await db.ref('paneller').orderByChild('owner').equalTo(currentCreatorUsername).once('value');
+    const wrap=document.getElementById('creatorPanelsList');
+    let html='';
+    let count=0;
+    if(snap.exists()){
+        snap.forEach(child=>{
+            count++;
+            const p=child.val();
+            const pName=child.key;
+            const exp=p.expiresAt?new Date(p.expiresAt).toLocaleDateString():'∞';
+            const isExp=p.expiresAt&&p.expiresAt<Date.now();
+            const badge=isExp?'<span style="background:rgba(239,68,68,.15);color:#ef4444;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;">Expired</span>':'<span style="background:rgba(34,197,94,.15);color:#22c55e;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;">Aktiw</span>';
+            html+=`<div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:12px;padding:16px;margin-bottom:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:150px;">
+                        <div style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;flex-wrap:wrap;">📁 ${escHtml(pName)} ${badge}</div>
+                        <div style="font-size:11.5px;color:var(--text-secondary);margin-top:6px;">
+                            Parol: <b style="color:var(--text-main);">${escHtml(p.parol||'')}</b> • Limit: <b style="color:var(--text-main);">${p.limit||0}</b> • Möhlet: <b style="color:var(--text-main);">${exp}</b>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:6px;">
+                        <button class="btn-danger" style="padding:8px 12px;" onclick="deleteOwnPanel('${escHtml(pName)}')">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        });
+    } else {
+        html='<p style="text-align:center;color:var(--text-secondary);padding:20px;">Entek panel döredilmedi.</p>';
+    }
+    wrap.innerHTML=html;
+    currentCreatorPanelsCount=count;
+    document.getElementById('creatorLimitInfo').textContent='Limit: '+currentCreatorLimit+' • Döredilen: '+count;
+}
+
+document.getElementById('creatorCreatePanelBtn').addEventListener('click',async()=>{
+    if(!isCreator) return;
+    if(currentCreatorPanelsCount>=currentCreatorLimit){showToast('Limit!',true);return;}
+    const name=document.getElementById('creatorNewPanelName').value.trim().replace(/[.#$\[\]]/g,'');
+    const pass=document.getElementById('creatorNewPanelPass').value.trim();
+    const limit=parseInt(document.getElementById('creatorNewPanelLimit').value);
+    const expiryInput=document.getElementById('creatorNewPanelExpiry').value.trim();
+    const expiresAt=parseExpiryInput(expiryInput);
+    if(!name||!pass||!limit){showToast('Ähli meýdanlary dolduryň',true);return;}
+    const btn=document.getElementById('creatorCreatePanelBtn');
+    btn.disabled=true;
+    try{
+        const snap=await db.ref('paneller/'+name).once('value');
+        if(snap.exists()){showToast('Panel already exists!',true);return;}
+        await db.ref('paneller/'+name).set({parol:pass,limit:limit,wagt:Date.now(),owner:currentCreatorUsername,expiresAt:expiresAt,expired:expiresAt&&expiresAt<Date.now()});
+        ['creatorNewPanelName','creatorNewPanelPass','creatorNewPanelLimit','creatorNewPanelExpiry'].forEach(id=>document.getElementById(id).value='');
+        showToast('Panel created!');
+        await loadCreatorData();
+    }catch(e){showToast('Error: '+e.message,true);}
+    finally{btn.disabled=false;}
+});
+
+window.deleteOwnPanel=function(pName){
+    const doDelete=async()=>{
+        const snap=await db.ref('paneller/'+pName).once('value');
+        if(snap.exists()&&snap.val().owner===currentCreatorUsername){
+            await db.ref('paneller/'+pName).remove();
+            showToast('Panel pozuldy');
+            await loadCreatorData();
+        } else showToast('Not yours!',true);
+    };
+    if(confirm('Delete "'+pName+'"?')) doDelete();
+};
+
+/* Init support URL */
+(async()=>{
+    const s=await db.ref('sazlamalar/support_url').once('value');
+    if(s.exists()){
+        const url = s.value||s.val();
+        document.getElementById('adminSupportBtn').href=url;
+        const eBtn = document.getElementById('expiredSupportBtn');
+        if(eBtn) eBtn.href = url;
+    }
+})();
+  </script>
+ </body>
+</html>
+<script async="" data-app-host="app.netlify.com" data-netlify-site-id="46e4fef3-202a-4370-a75a-c8d423dab2fc" data-nf-variant="public" src="/.netlify/scripts/hud?variant=public">
+</script>
